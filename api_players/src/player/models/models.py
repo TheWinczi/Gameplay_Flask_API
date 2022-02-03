@@ -29,8 +29,8 @@ class Player(Base):
         self.username = username
         self.image_file = image_file
 
-    def to_dict(self):
-        """ Convert Player object to dictionary
+    def to_full_dict(self):
+        """ Convert full Player object to dictionary
 
         Returns
         -------
@@ -39,8 +39,23 @@ class Player(Base):
         """
         return {
             "id": self.id,
+            "date_created": self.date_created.isoformat(),
+            "date_modified": self.date_modified.isoformat(),
             "username": self.username,
             "image_file": self.image_file
+        }
+
+    def to_short_dict(self):
+        """ Convert short Player object to dictionary
+
+        Returns
+        -------
+        player : dict
+            Converted Player object to dictionary
+        """
+        return {
+            "id": self.id,
+            "username": self.username
         }
 
     def __repr__(self):

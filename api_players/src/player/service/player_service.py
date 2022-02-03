@@ -61,6 +61,7 @@ class PlayerService(object):
         """
         if not isinstance(player, Player):
             raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")
+
         return PlayerRepository.create(player)
 
     @staticmethod
@@ -72,15 +73,15 @@ class PlayerService(object):
         player : Player
             Player object to add.
 
+        Returns
+        -------
+        id : int
+            Id of created player.
+
         Raises
         ------
         TypeError
             If type of provided player is different than allowed.
-
-        Notes
-        -----
-        If player with the same id as the provided player does
-        not exist in database new player is created.
         """
         if not isinstance(player, Player):
             raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")

@@ -16,15 +16,15 @@ class PlayersAPI(Resource):
         players = PlayerService.find_all()
         return {
             "players": list(
-                map(lambda player: player.to_dict(), players)
+                map(lambda player: player.to_short_dict(), players)
             )
         }
 
     def post(self):
         args = player_post_args.parse_args()
         player = Player(args["username"], args["image_file"])
-        PlayerService.create(player)
-        return Response(status=201)
+        player_id = PlayerService.create(player)
+        return {"location": f"/api/players/{player_id}"}, 201
 
 
 class PlayersByIdAPI(Resource):
@@ -36,7 +36,7 @@ class PlayersByIdAPI(Resource):
     def get(self, id):
         player = PlayerService.find(id)
         if player:
-            return player.to_dict()
+            return player.to_full_dict()
         else:
             return Response(status=404)
 
@@ -49,10 +49,14 @@ class PlayersByIdAPI(Resource):
             if "image_file" in args and args["image_file"] is not None:
                 player.image_file = args["image_file"]
             PlayerService.update(player)
-            return Response(status=200)
+            return Response(status=202)
         else:
             return Response(status=404)
 
     def delete(self, id):
-        PlayerService.delete(id)
-        return Response(status=200)
+        player = PlayerService.find(id)
+        if player:
+            PlayerService.delete(id)
+            return Response(status=202)
+        else:
+            return Response(status=404)

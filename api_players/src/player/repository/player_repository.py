@@ -1,6 +1,8 @@
 from src import db
 from src.player.models.models import Player
 
+from datetime import datetime
+
 
 class PlayerRepository(object):
     """ Class responsible for adding, saving, deleting and
@@ -77,7 +79,12 @@ class PlayerRepository(object):
         Parameters
         ----------
         player : Player
-        Player object to add.
+            Player object to add.
+
+        Returns
+        -------
+        id : int
+            Id of created player.
 
         Raises
         ------
@@ -89,6 +96,8 @@ class PlayerRepository(object):
 
         db.session.add(player)
         db.session.commit()
+
+        return player.id
 
     @staticmethod
     def update(player):
@@ -103,18 +112,12 @@ class PlayerRepository(object):
         ------
         TypeError
             If type of provided player is different than allowed.
-
-        Notes
-        -----
-        If player with the same id as the provided player does
-        not exist in database new player is created.
         """
         if not isinstance(player, Player):
             raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")
 
         existing_player = Player.query.filter_by(id=player.id).first()
         if existing_player:
+            existing_player.date_modified = datetime.now()
             db.session.add(player)
             db.session.commit()
-        else:
-            PlayerRepository.create(player)

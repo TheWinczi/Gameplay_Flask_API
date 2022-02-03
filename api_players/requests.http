@@ -1,0 +1,37 @@
+// =====================================================
+//                 Players API Requests
+// =====================================================
+
+
+###
+
+GET http://localhost:8080/api/players
+
+###
+
+GET http://localhost:8080/api/players/3
+
+###
+
+POST http://localhost:8080/api/players
+Content-Type: application/json
+
+{
+  "username": "The New Player",
+  "image_file": "unknown.png"
+}
+
+###
+
+PUT http://localhost:8080/api/players/4
+Content-Type: application/json
+
+{
+  "username": "The New Player USERNAME"
+}
+
+###
+
+DELETE http://localhost:8080/api/players/10
+
+###

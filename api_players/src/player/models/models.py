@@ -1,7 +1,7 @@
 from datetime import datetime
 
 # Import db object from root src module
-from src import db
+from api_players.src import db
 
 
 class Base(db.Model):

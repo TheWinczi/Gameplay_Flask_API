@@ -12,6 +12,7 @@ class PlayersAPI(Resource):
 
     Source url is /api/players
     """
+
     def get(self):
         players = PlayerService.find_all()
         return {
@@ -29,10 +30,11 @@ class PlayersAPI(Resource):
 
 class PlayersByIdAPI(Resource):
     """ Players by id API controller.
-    Responsible for getting, updating and deleting player with provided id.
+    Responsible for getting, updating and deleting players with provided id.
 
     Source url is /api/players/<int:id>
     """
+
     def get(self, id):
         player = PlayerService.find(id)
         if player:

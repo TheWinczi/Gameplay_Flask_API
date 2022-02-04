@@ -1,5 +1,5 @@
-from src import db
-from src.player.models.models import Player
+from api_players.src import db
+from api_players.src.player.models.models import Player
 
 from datetime import datetime
 

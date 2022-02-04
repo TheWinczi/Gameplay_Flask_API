@@ -1,5 +1,5 @@
-from src.player.models.models import Player
-from src.player.repository.player_repository import PlayerRepository
+from api_players.src.player.models.models import Player
+from api_players.src.player.repository.player_repository import PlayerRepository
 
 
 def _initialize_players():

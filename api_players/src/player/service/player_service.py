@@ -1,7 +1,4 @@
-# Import Player repository object
 from ..repository.player_repository import PlayerRepository
-
-# Import Player model
 from ..models.models import Player
 
 

@@ -1,0 +1,55 @@
+// =====================================================
+//                 games API Requests
+// =====================================================
+
+
+###
+
+GET http://localhost:8081/api/games
+
+###
+// Getting exising game
+GET http://localhost:8081/api/games/1
+
+###
+// Getting NOT exising game
+GET http://localhost:8081/api/games/1000
+
+###
+
+POST http://localhost:8081/api/games
+Content-Type: application/json
+
+{
+  "username": "The New Player",
+  "image_file": "unknown.png"
+}
+
+###
+// Updateing exising game
+
+PUT http://localhost:8081/api/games/1
+Content-Type: application/json
+
+{
+  "username": "The New Player USERNAME"
+}
+
+###
+// Updateing NOT exising game
+
+PUT http://localhost:8081/api/games/1000
+Content-Type: application/json
+
+{
+  "username": "The New Player USERNAME"
+}
+
+###
+// Deleting exising game
+
+DELETE http://localhost:8081/api/games/1
+
+###
+// Deleting NOT exising game
+DELETE http://localhost:8081/api/games/1000

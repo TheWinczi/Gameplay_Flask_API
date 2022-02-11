@@ -2,5 +2,5 @@ echo off
 
 set FLASK_APP=src
 set FLASK_ENV=development
-set FLASK_RUN_PORT=8080
+set FLASK_RUN_PORT=8081
 flask run

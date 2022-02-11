@@ -26,3 +26,6 @@ CSRF_SESSION_KEY = "absolutely_secret_csrf_key"
 
 # Secret key for signing cookies
 SECRET_KEY = "absolutely_secret_key"
+
+# Other services addresses
+GAME_SERVER_URL = "http://localhost:8082/"

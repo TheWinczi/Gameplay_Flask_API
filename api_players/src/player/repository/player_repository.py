@@ -6,7 +6,7 @@ from datetime import datetime
 
 class PlayerRepository(object):
     """ Class responsible for adding, saving, deleting and
-    updating players models inside directly in database. """
+    updating players models directly in database. """
 
     def __init__(self):
         pass
@@ -51,28 +51,6 @@ class PlayerRepository(object):
             return None
 
     @staticmethod
-    def delete(id):
-        """ Delete Player object  containing provided id from database.
-
-        Parameters
-        ----------
-        id : int
-            Id of the player to delete.
-
-        Raises
-        ------
-        TypeError
-            If type of provided id is different than allowed.
-        """
-        if not isinstance(id, int):
-            raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
-
-        player = Player.query.filter_by(id=id).first()
-        if player:
-            db.session.query(Player).filter_by(id=id).delete()
-            db.session.commit()
-
-    @staticmethod
     def create(player):
         """ Create new instance of Player object in database.
 
@@ -98,6 +76,28 @@ class PlayerRepository(object):
         db.session.commit()
 
         return player.id
+
+    @staticmethod
+    def delete(id):
+        """ Delete Player object  containing provided id from database.
+
+        Parameters
+        ----------
+        id : int
+            Id of the player to delete.
+
+        Raises
+        ------
+        TypeError
+            If type of provided id is different than allowed.
+        """
+        if not isinstance(id, int):
+            raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
+
+        player = Player.query.filter_by(id=id).first()
+        if player:
+            db.session.query(Player).filter_by(id=id).delete()
+            db.session.commit()
 
     @staticmethod
     def update(player):

@@ -1,5 +1,5 @@
-from ..repository.player_repository import PlayerRepository
-from ..models.models import Player
+from api_players.src.player.repository.player_repository import PlayerRepository
+from api_players.src.player.models.models import Player
 
 
 class PlayerService(object):

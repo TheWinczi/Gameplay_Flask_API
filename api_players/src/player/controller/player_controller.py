@@ -1,6 +1,7 @@
-from ..service.player_service import PlayerService
-from ..requests_parsers.requests_parsers import *
-from ..models.models import Player
+from api_players.src.player.service.player_service import PlayerService
+from api_players.src.player.event.player_event import PlayerEvent
+from api_players.src.player.requests_parsers.requests_parsers import *
+from api_players.src.player.models.models import Player
 
 from flask import Response
 from flask_restful import Resource
@@ -23,8 +24,9 @@ class PlayersAPI(Resource):
 
     def post(self):
         args = player_post_args.parse_args()
-        player = Player(args["username"], args["image_file"])
+        player = Player(username=args["username"], image_file=args["image_file"])
         player_id = PlayerService.create(player)
+        PlayerEvent.create(player)
         return {"location": f"/api/players/{player_id}"}, 201
 
 
@@ -59,6 +61,7 @@ class PlayersByIdAPI(Resource):
         player = PlayerService.find(id)
         if player:
             PlayerService.delete(id)
+            PlayerEvent.delete(id)
             return Response(status=202)
         else:
             return Response(status=404)

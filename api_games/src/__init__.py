@@ -47,7 +47,8 @@ def create_app(test_config=None):
     # Build the database
     db.create_all()
 
-    from api_games.src.configuration.initialize_data import initialize_models
-    initialize_models()
+    if app.config.get("INITIALIZE_MODELS", False):
+        from api_games.src.configuration.initialize_data import initialize_models
+        initialize_models()
 
     return app

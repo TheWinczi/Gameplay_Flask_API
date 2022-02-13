@@ -8,9 +8,6 @@ class PlayerRepository(object):
     """ Class responsible for adding, saving, deleting and
     updating players models directly in database. """
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def find_all():
         """ Find all existing Player objects in database.
@@ -96,7 +93,7 @@ class PlayerRepository(object):
 
         player = Player.query.filter_by(id=id).first()
         if player:
-            db.session.query(Player).filter_by(id=id).delete()
+            db.session.query(Player).filter_by(id=id).delete(synchronize_session='fetch')
             db.session.commit()
 
     @staticmethod

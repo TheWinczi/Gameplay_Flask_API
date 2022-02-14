@@ -20,7 +20,6 @@ def _initialize_players():
         PlayerRepository.create(player)
 
 
-
 def initialize_models():
     """ Initialize all needed models.
 

@@ -20,14 +20,17 @@ class PlayersAPI(Resource):
             "players": list(
                 map(lambda player: player.to_short_dict(), players)
             )
-        }
+        }, 200
 
     def post(self):
         args = player_post_args.parse_args()
         player = Player(username=args["username"], image_file=args["image_file"])
-        player_id = PlayerService.create(player)
-        PlayerEvent.create(player)
-        return {"location": f"/api/players/{player_id}"}, 201
+        result = PlayerService.create(player)
+        if result != PlayerService.FAIL_RETURN_VALUE:
+            PlayerEvent.create(player)
+            return {"location": f"/api/players/{result}"}, 201
+        else:
+            return Response(status=500)
 
 
 class PlayersByIdAPI(Resource):
@@ -44,7 +47,7 @@ class PlayersByIdAPI(Resource):
         else:
             return Response(status=404)
 
-    def put(self, id):
+    def put(self, id: int):
         args = player_put_args.parse_args()
         player = PlayerService.find(id)
         if player:
@@ -52,16 +55,23 @@ class PlayersByIdAPI(Resource):
                 player.username = args["username"]
             if "image_file" in args and args["image_file"] is not None:
                 player.image_file = args["image_file"]
-            PlayerService.update(player)
-            return Response(status=202)
+
+            result = PlayerService.update(player)
+            if result == PlayerService.SUCCESS_RETURN_VALUE:
+                return Response(status=202)
+            else:
+                return Response(status=500)
         else:
             return Response(status=404)
 
-    def delete(self, id):
+    def delete(self, id: int):
         player = PlayerService.find(id)
         if player:
-            PlayerService.delete(id)
-            PlayerEvent.delete(id)
-            return Response(status=202)
+            result = PlayerService.delete(id)
+            if result == PlayerService.SUCCESS_RETURN_VALUE:
+                PlayerEvent.delete(id)
+                return Response(status=202)
+            else:
+                return Response(status=500)
         else:
             return Response(status=404)

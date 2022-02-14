@@ -10,6 +10,7 @@ from api_players.src import create_app
 APP = create_app({"TESTING": True, "INITIALIZE_MODELS": False})
 
 from api_players.src.player.models.models import Player
+from api_players.src.player.service.player_service import PlayerService
 
 
 class PlayerControllerTests(unittest.TestCase):
@@ -80,7 +81,7 @@ class PlayerControllerTests(unittest.TestCase):
         with patch('api_players.src.player.service.player_service.PlayerService.find') as mocked_find_service, \
                 patch('api_players.src.player.service.player_service.PlayerService.update') as mocked_update_service:
             mocked_find_service.return_value = Player(username="Test Player Username")
-            mocked_update_service.return_value = 1
+            mocked_update_service.return_value = PlayerService.SUCCESS_RETURN_VALUE
 
             response = self.APP.put("/api/players/1", data=dict(
                 username="Updated Username",
@@ -89,7 +90,7 @@ class PlayerControllerTests(unittest.TestCase):
             mocked_find_service.assert_called_with(1)
             mocked_update_service.assert_called()
 
-            self.assertEqual(response.status_code, 202, "Response code of deleting not existing game should be equal 404")
+            self.assertEqual(response.status_code, 202, "Response code of updating existing player should be equal 202")
 
     def test_put_not_existing_player(self):
         with patch('api_players.src.player.service.player_service.PlayerService.find') as mocked_service:
@@ -106,7 +107,7 @@ class PlayerControllerTests(unittest.TestCase):
                 patch('api_players.src.player.service.player_service.PlayerService.delete') as mocked_delete_service, \
                 patch('api_players.src.player.event.player_event.PlayerEvent.delete') as mocked_event:
             mocked_find_service.return_value = Player(username="Player Username")
-            mocked_delete_service.return_value = 1
+            mocked_delete_service.return_value = PlayerService.SUCCESS_RETURN_VALUE
 
             response = self.APP.delete("/api/players/1")
             mocked_find_service.assert_called_with(1)

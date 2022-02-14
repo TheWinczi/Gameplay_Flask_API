@@ -36,15 +36,17 @@ def create_app(test_config=None):
     global api
     api = Api(app)
 
-    from .player.controller.player_controller import PlayersAPI, PlayersByIdAPI
+    from api_players.src.player.controller.player_controller import PlayersAPI, PlayersByIdAPI
     api.add_resource(PlayersAPI, '/api/players')
     api.add_resource(PlayersByIdAPI, '/api/players/<int:id>')
 
     # Build the database
+    db.drop_all()
     db.create_all()
 
     # Initialize default models objects
-    from .configuration.initialize_data import initialize_models
-    initialize_models()
+    if app.config.get("INITIALIZE_MODELS", False):
+        from api_players.src.configuration.initialize_data import initialize_models
+        initialize_models()
 
     return app

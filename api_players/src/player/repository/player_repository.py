@@ -3,13 +3,15 @@ from api_players.src.player.models.models import Player
 
 from datetime import datetime
 
+from sqlalchemy import exc
+
 
 class PlayerRepository(object):
     """ Class responsible for adding, saving, deleting and
-    updating players models inside directly in database. """
+    updating players models directly in database. """
 
-    def __init__(self):
-        pass
+    SUCCESS_RETURN_VALUE = 1
+    FAIL_RETURN_VALUE = 0
 
     @staticmethod
     def find_all():
@@ -23,7 +25,7 @@ class PlayerRepository(object):
         return list(Player.query.all())
 
     @staticmethod
-    def find_by_id(id):
+    def find_by_id(id: int):
         """ Find player model with a provided id.
 
         Parameters
@@ -51,13 +53,60 @@ class PlayerRepository(object):
             return None
 
     @staticmethod
-    def delete(id):
+    def create(player: Player,
+               fail_return_value=FAIL_RETURN_VALUE):
+        """ Create new instance of Player object in database.
+
+        Parameters
+        ----------
+        player : Player
+            Player object to add.
+
+        fail_return_value : Any
+            Optional. Value returned when creating failed.
+
+        Returns
+        -------
+        id : int
+            Id of created player. However when creating failed `fail_return_value` is returned.
+
+        Raises
+        ------
+        TypeError
+            If type of provided player is different than allowed. Default = `FAIL_RETURN_VALUE`
+        """
+        if not isinstance(player, Player):
+            raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")
+
+        try:
+            db.session.add(player)
+            db.session.commit()
+            return player.id
+        except exc.SQLAlchemyError:
+            return fail_return_value
+
+    @staticmethod
+    def delete(id: int,
+               success_return_value=SUCCESS_RETURN_VALUE,
+               fail_return_value=FAIL_RETURN_VALUE):
         """ Delete Player object  containing provided id from database.
 
         Parameters
         ----------
         id : int
             Id of the player to delete.
+
+        success_return_value : Any
+            Optional. Value returned when deleting succeed.
+
+        fail_return_value : Any
+            Optional. Value returned when deleting failed.
+
+        Returns
+        -------
+        result : Any
+            When deleting succeed `success_return_value` is returned.
+            When deleting failed `fail_return_value` is returned.
 
         Raises
         ------
@@ -69,44 +118,37 @@ class PlayerRepository(object):
 
         player = Player.query.filter_by(id=id).first()
         if player:
-            db.session.query(Player).filter_by(id=id).delete()
-            db.session.commit()
+            try:
+                db.session.query(Player).filter_by(id=id).delete(synchronize_session='fetch')
+                db.session.commit()
+                return success_return_value
+            except exc.SQLAlchemyError:
+                return fail_return_value
+        else:
+            return fail_return_value
 
     @staticmethod
-    def create(player):
-        """ Create new instance of Player object in database.
-
-        Parameters
-        ----------
-        player : Player
-            Player object to add.
-
-        Returns
-        -------
-        id : int
-            Id of created player.
-
-        Raises
-        ------
-        TypeError
-            If type of provided player is different than allowed.
-        """
-        if not isinstance(player, Player):
-            raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")
-
-        db.session.add(player)
-        db.session.commit()
-
-        return player.id
-
-    @staticmethod
-    def update(player):
+    def update(player: Player,
+               success_return_value=SUCCESS_RETURN_VALUE,
+               fail_return_value=FAIL_RETURN_VALUE):
         """ Update existing player with provided player object
 
         Parameters
         ----------
         player : Player
             Player object to add.
+
+        success_return_value : Any
+            Optional. Value returned when updating succeed.
+
+        fail_return_value : Any
+            Optional. Value returned when updating failed.
+
+        Returns
+        -------
+        result : Any
+            When deleting succeed `success_return_value` is returned.
+            When deleting failed `fail_return_value` is returned.
 
         Raises
         ------
@@ -119,5 +161,11 @@ class PlayerRepository(object):
         existing_player = Player.query.filter_by(id=player.id).first()
         if existing_player:
             existing_player.date_modified = datetime.now()
-            db.session.add(player)
-            db.session.commit()
+            try:
+                db.session.add(player)
+                db.session.commit()
+                return success_return_value
+            except exc.SQLAlchemyError:
+                return fail_return_value
+        else:
+            return fail_return_value

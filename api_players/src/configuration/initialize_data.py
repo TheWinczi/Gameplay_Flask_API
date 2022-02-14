@@ -11,14 +11,13 @@ def _initialize_players():
     configuration and adds these to database.
     """
     players = [
-        Player("Player 1", "the_best.png"),
-        Player("Player 2"),
-        Player("Player 3", "def.png")
+        Player(username="Player 1", image_file="the_best.png"),
+        Player(username="Player 2"),
+        Player(username="Player 3", image_file="def.png")
     ]
 
     for player in players:
         PlayerRepository.create(player)
-
 
 
 def initialize_models():

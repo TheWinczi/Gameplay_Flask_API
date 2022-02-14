@@ -5,19 +5,19 @@
 
 ###
 
-GET http://localhost:8080/api/players
+GET http://localhost:8081/api/players
 
 ###
 // Getting exising player
-GET http://localhost:8080/api/players/1
+GET http://localhost:8081/api/players/1
 
 ###
 // Getting NOT exising player
-GET http://localhost:8080/api/players/1000
+GET http://localhost:8081/api/players/1000
 
 ###
 
-POST http://localhost:8080/api/players
+POST http://localhost:8081/api/players
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 ###
 // Updateing exising player
 
-PUT http://localhost:8080/api/players/1
+PUT http://localhost:8081/api/players/1
 Content-Type: application/json
 
 {
@@ -38,7 +38,7 @@ Content-Type: application/json
 ###
 // Updateing NOT exising player
 
-PUT http://localhost:8080/api/players/1000
+PUT http://localhost:8081/api/players/1000
 Content-Type: application/json
 
 {
@@ -48,8 +48,8 @@ Content-Type: application/json
 ###
 // Deleting exising player
 
-DELETE http://localhost:8080/api/players/1
+DELETE http://localhost:8081/api/players/1
 
 ###
 // Deleting NOT exising player
-DELETE http://localhost:8080/api/players/1000
+DELETE http://localhost:8081/api/players/1000

@@ -1,5 +1,5 @@
-from api_players.src.player.repository.player_repository import PlayerRepository
-from api_players.src.player.models.models import Player
+from api_games.src.player.repository.player_repository import PlayerRepository
+from api_games.src.player.models.models import Player
 
 
 class PlayerService(object):
@@ -9,7 +9,7 @@ class PlayerService(object):
 
     SUCCESS_RETURN_VALUE = 1
     FAIL_RETURN_VALUE = 0
-    
+
     @staticmethod
     def find(id: int):
         """ Find player model with a provided id.

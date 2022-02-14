@@ -1,17 +1,30 @@
-from api_players.src.player.repository.player_repository import PlayerRepository
-from api_players.src.player.models.models import Player
+from api_games.src.player.models.models import Player
+
+from api_games.src import db
+
+from sqlalchemy import exc
 
 
-class PlayerService(object):
+class PlayerRepository(object):
     """ Class responsible for adding, saving, deleting and
-        updating players using Player repository.
-        Between repository and controller. """
+    updating players models directly in database. """
 
     SUCCESS_RETURN_VALUE = 1
     FAIL_RETURN_VALUE = 0
-    
+
     @staticmethod
-    def find(id: int):
+    def find_all():
+        """ Find all existing Player objects in database.
+
+        Returns
+        -------
+        players : list[Player]
+            List of founded Player objects.
+        """
+        return list(Player.query.all())
+
+    @staticmethod
+    def find_by_id(id: int):
         """ Find player model with a provided id.
 
         Parameters
@@ -32,18 +45,11 @@ class PlayerService(object):
         if not isinstance(id, int):
             raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
 
-        return PlayerRepository.find_by_id(id)
-
-    @staticmethod
-    def find_all():
-        """ Find all existing Player objects in database.
-
-        Returns
-        -------
-        players : list[Player]
-            List of founded Player objects.
-        """
-        return PlayerRepository.find_all()
+        player = Player.query.filter_by(id=id).first()
+        if player:
+            return player
+        else:
+            return None
 
     @staticmethod
     def create(player: Player,
@@ -66,22 +72,23 @@ class PlayerService(object):
         Raises
         ------
         TypeError
-            If type of provided player is different than allowed.
+            If type of provided player is different than allowed. Default = `FAIL_RETURN_VALUE`
         """
         if not isinstance(player, Player):
             raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")
 
-        result = PlayerRepository.create(player)
-        if result != PlayerRepository.FAIL_RETURN_VALUE:
-            return result
-        else:
+        try:
+            db.session.add(player)
+            db.session.commit()
+            return player.id
+        except exc.SQLAlchemyError:
             return fail_return_value
 
     @staticmethod
     def delete(id: int,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):
-        """ Delete Player object containing provided id from database.
+        """ Delete Player object  containing provided id from database.
 
         Parameters
         ----------
@@ -108,14 +115,19 @@ class PlayerService(object):
         if not isinstance(id, int):
             raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
 
-        result = PlayerRepository.delete(id)
-        if result == PlayerRepository.SUCCESS_RETURN_VALUE:
-            return success_return_value
-        elif result == PlayerRepository.FAIL_RETURN_VALUE:
+        player = Player.query.filter_by(id=id).first()
+        if player:
+            try:
+                db.session.query(Player).filter_by(id=id).delete(synchronize_session='fetch')
+                db.session.commit()
+                return success_return_value
+            except exc.SQLAlchemyError:
+                return fail_return_value
+        else:
             return fail_return_value
 
     @staticmethod
-    def update(player,
+    def update(player: Player,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):
         """ Update existing player with provided player object
@@ -145,8 +157,13 @@ class PlayerService(object):
         if not isinstance(player, Player):
             raise TypeError(f"Illegal type of argument. Player could be only Player not {type(player)}")
 
-        result = PlayerRepository.update(player)
-        if result == PlayerRepository.SUCCESS_RETURN_VALUE:
-            return success_return_value
-        elif result == PlayerRepository.FAIL_RETURN_VALUE:
+        existing_player = Player.query.filter_by(id=player.id).first()
+        if existing_player:
+            try:
+                db.session.add(player)
+                db.session.commit()
+                return success_return_value
+            except exc.SQLAlchemyError:
+                return fail_return_value
+        else:
             return fail_return_value

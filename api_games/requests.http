@@ -1,55 +1,122 @@
 // =====================================================
-//                 games API Requests
+//                 Games API Requests
 // =====================================================
 
 
+// ------------- Games -------------
+
+
 ###
 
-GET http://localhost:8081/api/games
+GET http://localhost:8082/api/games
 
 ###
 // Getting exising game
-GET http://localhost:8081/api/games/1
+GET http://localhost:8082/api/games/1
 
 ###
 // Getting NOT exising game
-GET http://localhost:8081/api/games/1000
+GET http://localhost:8082/api/games/1000
 
 ###
 
-POST http://localhost:8081/api/games
+POST http://localhost:8082/api/games
 Content-Type: application/json
 
 {
-  "username": "The New Player",
-  "image_file": "unknown.png"
+  "description": "Next game, Yay ^^"
 }
 
 ###
 // Updateing exising game
 
-PUT http://localhost:8081/api/games/1
+PUT http://localhost:8082/api/games/1
 Content-Type: application/json
 
 {
-  "username": "The New Player USERNAME"
+  "description": "The New Game DESCRIPTION"
 }
 
 ###
 // Updateing NOT exising game
 
-PUT http://localhost:8081/api/games/1000
+PUT http://localhost:8082/api/games/1000
 Content-Type: application/json
 
 {
-  "username": "The New Player USERNAME"
+  "description": "The New Game Description"
 }
 
 ###
 // Deleting exising game
 
-DELETE http://localhost:8081/api/games/1
+DELETE http://localhost:8082/api/games/1
 
 ###
 // Deleting NOT exising game
-DELETE http://localhost:8081/api/games/1000
+DELETE http://localhost:8082/api/games/1000
+
+###
+
+
+// ------------- Players -------------
+
+
+GET http://localhost:8082/api/players
+
+###
+// Getting exising player
+GET http://localhost:8082/api/players/1
+
+###
+// Getting NOT exising player
+GET http://localhost:8082/api/players/1000
+
+###
+// Getting players of existing game
+GET http://localhost:8082/api/games/1/players
+
+###
+// Getting players of not existing game
+GET http://localhost:8082/api/games/1000/players
+
+###
+
+POST http://localhost:8082/api/players
+Content-Type: application/json
+
+{
+  "username": "Next player"
+}
+
+###
+// Updateing exising player
+
+PUT http://localhost:8082/api/players/1
+Content-Type: application/json
+
+{
+  "username": "The new player username",
+  "game_id": 1
+}
+
+###
+// Updateing NOT exising player
+
+PUT http://localhost:8082/api/players/1000
+Content-Type: application/json
+
+{
+  "username": "The new player username"
+}
+
+###
+// Deleting exising player
+
+DELETE http://localhost:8082/api/players/1
+
+###
+// Deleting NOT exising player
+DELETE http://localhost:8082/api/players/1000
+
+

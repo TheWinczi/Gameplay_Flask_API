@@ -25,10 +25,6 @@ class Player(Base):
     username = db.Column(db.String(50), nullable=False)
     image_file = db.Column(db.String(30), nullable=True, default="default_player_image.png")
 
-    def __init__(self, username, image_file="default_player_image.png"):
-        self.username = username
-        self.image_file = image_file
-
     def to_full_dict(self):
         """ Convert full Player object to dictionary
 
@@ -59,4 +55,4 @@ class Player(Base):
         }
 
     def __repr__(self):
-        return f"Player(username={self.username}, image_file={self.image_file})"
+        return f"Player(id={self.id}, username={self.username}, image_file={self.image_file})"

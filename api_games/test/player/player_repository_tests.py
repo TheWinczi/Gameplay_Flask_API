@@ -59,12 +59,11 @@ class PlayerRepositoryTests(unittest.TestCase):
         db_player = PlayerRepository.find_by_id(player_id)
 
         self.assertTrue(db_player is not None, "Created player should not be None")
-        self.assertEqual(player.username, db_player.username, "Created Player fields should be equal to added Player")
+        self.assertEqual(player.username, db_player.username, "Created Player fields should be equal to added Player fields")
 
     def test_create_player_not_being_player(self):
-        player = "player"
         with self.assertRaises(TypeError):
-            PlayerRepository.create(player)
+            PlayerRepository.create("player")
 
     def test_delete_existing_model(self):
         player_id = self.PLAYER.id
@@ -85,6 +84,10 @@ class PlayerRepositoryTests(unittest.TestCase):
 
         player = PlayerRepository.find_by_id(player_id)
         self.assertEqual(player.username, "Updated Username", "Updated Player should has updated fields")
+
+    def test_update_player_not_being_player(self):
+        with self.assertRaises(TypeError):
+            PlayerRepository.update("player")
 
 
 if __name__ == "__main__":

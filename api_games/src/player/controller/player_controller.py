@@ -1,6 +1,5 @@
 from api_games.src.player.service.player_service import PlayerService
 from api_games.src.game.service.game_service import GameService
-
 from api_games.src.player.requests_parsers.requests_parsers import *
 from api_games.src.player.models.models import Player
 
@@ -21,13 +20,16 @@ class PlayersAPI(Resource):
             "players": list(
                 map(lambda player: player.to_dict(), players)
             )
-        }
+        }, 200
 
     def post(self):
         args = player_post_args.parse_args()
         player = Player(username=args["username"], game_id=args["game_id"])
-        player_id = PlayerService.create(player)
-        return {"location": f"/api/players/{player_id}"}, 201
+        result = PlayerService.create(player)
+        if result != PlayerService.FAIL_RETURN_VALUE:
+            return {"location": f"/api/players/{result}"}, 201
+        else:
+            return Response(status=500)
 
 
 class PlayersByIdAPI(Resource):
@@ -37,14 +39,14 @@ class PlayersByIdAPI(Resource):
     Source url is /api/players/<int:id>
     """
 
-    def get(self, id):
+    def get(self, id: int):
         player = PlayerService.find(id)
         if player:
             return player.to_dict()
         else:
             return Response(status=404)
 
-    def put(self, id):
+    def put(self, id: int):
         args = player_put_args.parse_args()
         player = PlayerService.find(id)
         if player:
@@ -55,15 +57,22 @@ class PlayersByIdAPI(Resource):
                     return Response(status=404)
                 else:
                     player.game_id = args["game_id"]
-            PlayerService.update(player)
-            return Response(status=202)
+
+            result = PlayerService.update(player)
+            if result == PlayerService.SUCCESS_RETURN_VALUE:
+                return Response(status=202)
+            else:
+                return Response(status=500)
         else:
             return Response(status=404)
 
-    def delete(self, id):
+    def delete(self, id: int):
         player = PlayerService.find(id)
         if player:
-            PlayerService.delete(id)
-            return Response(status=202)
+            result = PlayerService.delete(id)
+            if result == PlayerService.SUCCESS_RETURN_VALUE:
+                return Response(status=202)
+            else:
+                return Response(status=500)
         else:
             return Response(status=404)

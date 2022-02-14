@@ -9,6 +9,7 @@ APP = create_app({"TESTING": True, "INITIALIZE_MODELS": False})
 
 from api_games.src.player.models.models import Player
 from api_games.src.player.service.player_service import PlayerService
+from api_games.src.player.repository.player_repository import PlayerRepository
 
 
 class PlayerServiceTests(unittest.TestCase):
@@ -17,8 +18,8 @@ class PlayerServiceTests(unittest.TestCase):
         with patch('api_games.src.player.repository.player_repository.PlayerRepository.find_by_id') as mocked_repo:
             mocked_repo.return_value = Player(username="Test Player Username")
 
-            player = PlayerService.find(10)
-            mocked_repo.assert_called_with(10)
+            player = PlayerService.find(1)
+            mocked_repo.assert_called_with(1)
 
             self.assertTrue(isinstance(player, Player), f"Returned player should be instance of Player not {type(player)}")
 
@@ -26,9 +27,9 @@ class PlayerServiceTests(unittest.TestCase):
         with patch('api_games.src.player.repository.player_repository.PlayerRepository.find_by_id') as mocked_repo:
             mocked_repo.return_value = None
 
-            player = PlayerService.find(10)
-            mocked_repo.assert_called_with(10)
-            self.assertTrue(player is None)
+            player = PlayerService.find(sys.maxsize)
+            mocked_repo.assert_called_with(sys.maxsize)
+            self.assertTrue(player is None, "Returned value of not existing player should be equal to None")
 
     def test_find_with_id_not_being_int(self):
         with self.assertRaises(TypeError):
@@ -59,9 +60,27 @@ class PlayerServiceTests(unittest.TestCase):
             self.assertTrue(isinstance(player_id, int), f"Returned id should be instance of int, not {type(player_id)}")
             self.assertTrue(player_id > 0, "Returned id should be grater than 0")
 
+    def test_update_existing_player(self):
+        with patch('api_games.src.player.repository.player_repository.PlayerRepository.update') as mocked_repo:
+            mocked_repo.return_value = PlayerRepository.SUCCESS_RETURN_VALUE
+
+            result = PlayerService.update(Player(username="Test Player"))
+            mocked_repo.assert_called()
+
+            self.assertEqual(result, PlayerService.SUCCESS_RETURN_VALUE, "When repository return SUCCESS then service should return SUCCESS")
+
     def test_update_with_player_not_being_player(self):
         with self.assertRaises(TypeError):
-            PlayerService.update("")
+            PlayerService.update("player")
+
+    def test_delete_existing_player(self):
+        with patch('api_games.src.player.repository.player_repository.PlayerRepository.delete') as mocked_repo:
+            mocked_repo.return_value = PlayerRepository.SUCCESS_RETURN_VALUE
+
+            result = PlayerService.delete(1)
+            mocked_repo.assert_called_with(1)
+
+            self.assertEqual(result, PlayerService.SUCCESS_RETURN_VALUE, "When repository return SUCCESS then service should return SUCCESS")
 
     def test_delete_with_id_not_being_int(self):
         with self.assertRaises(TypeError):

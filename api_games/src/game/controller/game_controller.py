@@ -19,13 +19,16 @@ class GamesAPI(Resource):
             "games": list(
                 map(lambda game: game.to_short_dict(), games)
             )
-        }
+        }, 200
 
     def post(self):
         args = game_post_args.parse_args()
         game = Game(description=args["description"])
-        game_id = GameService.create(game)
-        return {"location": f"/api/games/{game_id}"}, 201
+        result = GameService.create(game)
+        if result != GameService.FAIL_RETURN_VALUE:
+            return {"location": f"/api/games/{result}"}, 201
+        else:
+            return Response(status=500)
 
 
 class GamesByIdAPI(Resource):
@@ -35,29 +38,35 @@ class GamesByIdAPI(Resource):
     Source url is /api/games/<int:id>
     """
 
-    def get(self, id):
+    def get(self, id: int):
         game = GameService.find(id)
         if game:
             return game.to_full_dict()
         else:
             return Response(status=404)
 
-    def put(self, id):
+    def put(self, id: int):
         args = game_put_args.parse_args()
         game = GameService.find(id)
         if game:
             if "description" in args and args["description"] is not None:
                 game.description = args["description"]
-            GameService.update(game)
-            return Response(status=202)
+            result = GameService.update(game)
+            if result == GameService.SUCCESS_RETURN_VALUE:
+                return Response(status=202)
+            else:
+                return Response(status=500)
         else:
             return Response(status=404)
 
-    def delete(self, id):
+    def delete(self, id: int):
         game = GameService.find(id)
         if game:
-            GameService.delete(id)
-            return Response(status=202)
+            result = GameService.delete(id)
+            if result == GameService.SUCCESS_RETURN_VALUE:
+                return Response(status=202)
+            else:
+                return Response(status=500)
         else:
             return Response(status=404)
 
@@ -69,7 +78,7 @@ class GamesByIdPlayersAPI(Resource):
     Source url is /api/games/<int:id>/players
     """
 
-    def get(self, id):
+    def get(self, id: int):
         game = GameService.find(id)
         if game:
             game_players = game.players
@@ -77,6 +86,6 @@ class GamesByIdPlayersAPI(Resource):
                 "players": list(
                     map(lambda player: player.to_dict(), game_players)
                 )
-            }
+            }, 200
         else:
             return Response(status=404)

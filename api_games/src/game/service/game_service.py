@@ -3,12 +3,15 @@ from api_games.src.game.models.models import Game
 
 
 class GameService(object):
+    """ Class responsible for adding, saving, deleting and
+        updating games using Game repository.
+        Between repository and controller. """
 
-    def __init__(self):
-        pass
+    SUCCESS_RETURN_VALUE = 1
+    FAIL_RETURN_VALUE = 0
 
     @staticmethod
-    def find(id):
+    def find(id: int):
         """ Find game model with a provided id.
 
         Parameters
@@ -43,13 +46,22 @@ class GameService(object):
         return GameRepository.find_all()
 
     @staticmethod
-    def create(game):
+    def create(game: Game,
+               fail_return_value=FAIL_RETURN_VALUE):
         """ Create new instance of Game object in database.
 
         Parameters
         ----------
         game : Game
             Game object to add.
+
+        fail_return_value : Any
+            Optional. Value returned when creating failed.
+
+        Returns
+        -------
+        id : int
+            Id of created player. However when creating failed `fail_return_value` is returned.
 
         Raises
         ------
@@ -59,16 +71,71 @@ class GameService(object):
         if not isinstance(game, Game):
             raise TypeError(f"Illegal type of argument. Game could be only Game not {type(game)}")
 
-        return GameRepository.create(game)
+        result = GameRepository.create(game)
+        if result != GameRepository.FAIL_RETURN_VALUE:
+            return result
+        else:
+            return fail_return_value
 
     @staticmethod
-    def update(game):
+    def delete(id: int,
+               success_return_value=SUCCESS_RETURN_VALUE,
+               fail_return_value=FAIL_RETURN_VALUE):
+        """ Delete Game object containing provided id from database.
+
+        Parameters
+        ----------
+        id : int
+            Id of the game to delete.
+
+        success_return_value : Any
+            Optional. Value returned when deleting succeed.
+
+        fail_return_value : Any
+            Optional. Value returned when deleting failed.
+
+        Returns
+        -------
+        result : Any
+            When deleting succeed `success_return_value` is returned.
+            When deleting failed `fail_return_value` is returned.
+
+        Raises
+        ------
+        TypeError
+            If type of provided id is different than allowed.
+        """
+        if not isinstance(id, int):
+            raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
+
+        result = GameRepository.delete(id)
+        if result == GameRepository.SUCCESS_RETURN_VALUE:
+            return success_return_value
+        elif result == GameRepository.FAIL_RETURN_VALUE:
+            return fail_return_value
+
+    @staticmethod
+    def update(game: Game,
+               success_return_value=SUCCESS_RETURN_VALUE,
+               fail_return_value=FAIL_RETURN_VALUE):
         """ Update existing game with provided game object
 
         Parameters
         ----------
         game : Game
             Game object to add.
+
+        success_return_value : Any
+            Optional. Value returned when deleting succeed.
+
+        fail_return_value : Any
+            Optional. Value returned when deleting failed.
+
+        Returns
+        -------
+        result : Any
+            When updating succeed `success_return_value` is returned.
+            When updating failed `fail_return_value` is returned.
 
         Returns
         -------
@@ -83,23 +150,8 @@ class GameService(object):
         if not isinstance(game, Game):
             raise TypeError(f"Illegal type of argument. Game could be only Game not {type(game)}")
 
-        return GameRepository.update(game)
-
-    @staticmethod
-    def delete(id):
-        """ Delete Game object containing provided id from database.
-
-        Parameters
-        ----------
-        id : int
-            Id of the game to delete.
-
-        Raises
-        ------
-        TypeError
-            If type of provided id is different than allowed.
-        """
-        if not isinstance(id, int):
-            raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
-
-        GameRepository.delete(id)
+        result = GameRepository.update(game)
+        if result == GameRepository.SUCCESS_RETURN_VALUE:
+            return success_return_value
+        elif result == GameRepository.FAIL_RETURN_VALUE:
+            return fail_return_value

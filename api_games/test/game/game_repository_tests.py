@@ -62,9 +62,8 @@ class GameRepositoryTests(unittest.TestCase):
         self.assertEqual(game.description, db_game.description, "Created Game fields should be equal to added Game fields")
 
     def test_create_game_not_being_game(self):
-        game = "game"
         with self.assertRaises(TypeError):
-            GameRepository.create(game)
+            GameRepository.create("game")
 
     def test_delete_existing_game(self):
         game_id = self.GAME.id
@@ -85,6 +84,10 @@ class GameRepositoryTests(unittest.TestCase):
 
         game = GameRepository.find_by_id(game_id)
         self.assertEqual(game.description, "Updated Description", "Updated Game should has updated fields")
+
+    def test_update_game_not_being_game(self):
+        with self.assertRaises(TypeError):
+            GameRepository.update("game")
 
 
 if __name__ == "__main__":

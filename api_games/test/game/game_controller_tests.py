@@ -10,6 +10,7 @@ from api_games.src import create_app
 APP = create_app({"TESTING": True, "INITIALIZE_MODELS": False})
 
 from api_games.src.game.models.models import Game
+from api_games.src.game.service.game_service import GameService
 from api_games.src.player.models.models import Player
 
 
@@ -98,7 +99,7 @@ class GameControllerTests(unittest.TestCase):
         with patch('api_games.src.game.service.game_service.GameService.find') as mocked_find_service, \
                 patch('api_games.src.game.service.game_service.GameService.update') as mocked_update_service:
             mocked_find_service.return_value = Game(description="Test Game Description")
-            mocked_update_service.return_value = 1
+            mocked_update_service.return_value = GameService.SUCCESS_RETURN_VALUE
 
             response = self.APP.put("/api/games/1", data=dict(
                 description="Updated Description",
@@ -106,7 +107,7 @@ class GameControllerTests(unittest.TestCase):
             mocked_find_service.assert_called_with(1)
             mocked_update_service.assert_called()
 
-            self.assertEqual(response.status_code, 202, "Response code of deleting not existing game should be equal 404")
+            self.assertEqual(response.status_code, 202, "Response code of updating not existing game should be equal 202")
 
     def test_put_not_existing_game(self):
         with patch('api_games.src.game.service.game_service.GameService.find') as mocked_service:
@@ -122,7 +123,7 @@ class GameControllerTests(unittest.TestCase):
         with patch('api_games.src.game.service.game_service.GameService.find') as mocked_find_service, \
                 patch('api_games.src.game.service.game_service.GameService.delete') as mocked_delete_service:
             mocked_find_service.return_value = Game(description="Game Description")
-            mocked_delete_service.return_value = 1
+            mocked_delete_service.return_value = GameService.SUCCESS_RETURN_VALUE
 
             response = self.APP.delete("/api/games/1")
             mocked_find_service.assert_called_with(1)

@@ -14,12 +14,11 @@ def create_app(test_config=None):
     # create and configure the app
     global app
     app = Flask(__name__,
-                instance_relative_config=True,
                 instance_path=os.path.abspath(os.path.dirname(__file__)))
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
+        app.config.from_pyfile('../config.py', silent=True)
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
@@ -48,5 +47,10 @@ def create_app(test_config=None):
     if app.config.get("INITIALIZE_MODELS", False):
         from api_players.src.configuration.initialize_data import initialize_models
         initialize_models()
+
+    # Set needed variables for logging if needed
+    if app.config.get("ENABLE_LOGGING", False):
+        if not app.config.get("API_PLAYERS_LOGGING_FILE", False):
+            app.config["API_PLAYERS_LOGGING_FILE"] = "instance/api_players_logs.log"
 
     return app

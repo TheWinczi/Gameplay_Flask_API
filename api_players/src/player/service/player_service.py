@@ -1,6 +1,8 @@
 from api_players.src.player.repository.player_repository import PlayerRepository
 from api_players.src.player.models.models import Player
 
+from api_players.src.decorators.logging import log_info
+
 
 class PlayerService(object):
     """ Class responsible for adding, saving, deleting and
@@ -11,6 +13,7 @@ class PlayerService(object):
     FAIL_RETURN_VALUE = 0
     
     @staticmethod
+    @log_info()
     def find(id: int):
         """ Find player model with a provided id.
 
@@ -35,6 +38,7 @@ class PlayerService(object):
         return PlayerRepository.find_by_id(id)
 
     @staticmethod
+    @log_info()
     def find_all():
         """ Find all existing Player objects in database.
 
@@ -46,6 +50,7 @@ class PlayerService(object):
         return PlayerRepository.find_all()
 
     @staticmethod
+    @log_info()
     def create(player: Player,
                fail_return_value=FAIL_RETURN_VALUE):
         """ Create new instance of Player object in database.
@@ -78,6 +83,7 @@ class PlayerService(object):
             return fail_return_value
 
     @staticmethod
+    @log_info()
     def delete(id: int,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):
@@ -115,6 +121,7 @@ class PlayerService(object):
             return fail_return_value
 
     @staticmethod
+    @log_info()
     def update(player,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):

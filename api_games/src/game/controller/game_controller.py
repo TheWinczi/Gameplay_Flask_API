@@ -1,6 +1,7 @@
 from api_games.src.game.service.game_service import GameService
 from api_games.src.game.requests_parsers.requests_parsers import *
 from api_games.src.game.models.models import Game
+from api_games.src.decorators.logging import log_info
 
 from flask import Response
 from flask_restful import Resource
@@ -13,6 +14,7 @@ class GamesAPI(Resource):
     Source url is /api/games
     """
 
+    @log_info()
     def get(self):
         games = GameService.find_all()
         return {
@@ -21,6 +23,7 @@ class GamesAPI(Resource):
             )
         }, 200
 
+    @log_info()
     def post(self):
         args = game_post_args.parse_args()
         game = Game(description=args["description"])
@@ -38,6 +41,7 @@ class GamesByIdAPI(Resource):
     Source url is /api/games/<int:id>
     """
 
+    @log_info()
     def get(self, id: int):
         game = GameService.find(id)
         if game:
@@ -45,6 +49,7 @@ class GamesByIdAPI(Resource):
         else:
             return Response(status=404)
 
+    @log_info()
     def put(self, id: int):
         args = game_put_args.parse_args()
         game = GameService.find(id)
@@ -59,6 +64,7 @@ class GamesByIdAPI(Resource):
         else:
             return Response(status=404)
 
+    @log_info()
     def delete(self, id: int):
         game = GameService.find(id)
         if game:
@@ -78,6 +84,7 @@ class GamesByIdPlayersAPI(Resource):
     Source url is /api/games/<int:id>/players
     """
 
+    @log_info()
     def get(self, id: int):
         game = GameService.find(id)
         if game:

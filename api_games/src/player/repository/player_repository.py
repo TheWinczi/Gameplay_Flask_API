@@ -1,5 +1,5 @@
 from api_games.src.player.models.models import Player
-
+from api_games.src.decorators.logging import log_info
 from api_games.src import db
 
 from sqlalchemy import exc
@@ -13,6 +13,7 @@ class PlayerRepository(object):
     FAIL_RETURN_VALUE = 0
 
     @staticmethod
+    @log_info()
     def find_all():
         """ Find all existing Player objects in database.
 
@@ -24,6 +25,7 @@ class PlayerRepository(object):
         return list(Player.query.all())
 
     @staticmethod
+    @log_info()
     def find_by_id(id: int):
         """ Find player model with a provided id.
 
@@ -52,6 +54,7 @@ class PlayerRepository(object):
             return None
 
     @staticmethod
+    @log_info()
     def create(player: Player,
                fail_return_value=FAIL_RETURN_VALUE):
         """ Create new instance of Player object in database.
@@ -85,6 +88,7 @@ class PlayerRepository(object):
             return fail_return_value
 
     @staticmethod
+    @log_info()
     def delete(id: int,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):
@@ -127,6 +131,7 @@ class PlayerRepository(object):
             return fail_return_value
 
     @staticmethod
+    @log_info()
     def update(player: Player,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):

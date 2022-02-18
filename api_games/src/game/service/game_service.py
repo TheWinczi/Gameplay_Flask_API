@@ -1,5 +1,6 @@
 from api_games.src.game.repository.game_repository import GameRepository
 from api_games.src.game.models.models import Game
+from api_games.src.decorators.logging import log_info
 
 
 class GameService(object):
@@ -11,6 +12,7 @@ class GameService(object):
     FAIL_RETURN_VALUE = 0
 
     @staticmethod
+    @log_info()
     def find(id: int):
         """ Find game model with a provided id.
 
@@ -35,6 +37,7 @@ class GameService(object):
         return GameRepository.find_by_id(id)
 
     @staticmethod
+    @log_info()
     def find_all():
         """ Find all existing Game objects in database.
 
@@ -46,6 +49,7 @@ class GameService(object):
         return GameRepository.find_all()
 
     @staticmethod
+    @log_info()
     def create(game: Game,
                fail_return_value=FAIL_RETURN_VALUE):
         """ Create new instance of Game object in database.
@@ -78,6 +82,7 @@ class GameService(object):
             return fail_return_value
 
     @staticmethod
+    @log_info()
     def delete(id: int,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):
@@ -115,6 +120,7 @@ class GameService(object):
             return fail_return_value
 
     @staticmethod
+    @log_info()
     def update(game: Game,
                success_return_value=SUCCESS_RETURN_VALUE,
                fail_return_value=FAIL_RETURN_VALUE):

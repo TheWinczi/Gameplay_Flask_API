@@ -2,6 +2,7 @@ from api_players.src.player.service.player_service import PlayerService
 from api_players.src.player.event.player_event import PlayerEvent
 from api_players.src.player.requests_parsers.requests_parsers import *
 from api_players.src.player.models.models import Player
+from api_players.src.decorators.logging import log_info
 
 from flask import Response
 from flask_restful import Resource
@@ -14,6 +15,7 @@ class PlayersAPI(Resource):
     Source url is /api/players
     """
 
+    @log_info()
     def get(self):
         players = PlayerService.find_all()
         return {
@@ -22,6 +24,7 @@ class PlayersAPI(Resource):
             )
         }, 200
 
+    @log_info()
     def post(self):
         args = player_post_args.parse_args()
         player = Player(username=args["username"], image_file=args["image_file"])
@@ -40,6 +43,7 @@ class PlayersByIdAPI(Resource):
     Source url is /api/players/<int:id>
     """
 
+    @log_info()
     def get(self, id):
         player = PlayerService.find(id)
         if player:
@@ -47,6 +51,7 @@ class PlayersByIdAPI(Resource):
         else:
             return Response(status=404)
 
+    @log_info()
     def put(self, id: int):
         args = player_put_args.parse_args()
         player = PlayerService.find(id)
@@ -64,6 +69,7 @@ class PlayersByIdAPI(Resource):
         else:
             return Response(status=404)
 
+    @log_info()
     def delete(self, id: int):
         player = PlayerService.find(id)
         if player:

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if game %}
+        <div class="bg-light mb-3 py-2 px-2">
+            <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
+                <h3>
+                    <i class="fa-solid fa-gamepad"></i>
+                    Players of game with id - {{ game.id }}
+                </h3>
+                <div class="btn-group mb-2">
+                    <a href="/games/{{ game.id }}" class="btn btn-success" role="button">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Details
+                    </a>
+                    <a href="/games/{{ game.id }}/edit" class="btn btn-secondary" role="button">
+                        <i class="fa-solid fa-gears"></i>
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if players %}
+        {% for player in players %}
+            <div class="bg-light mb-3 py-2 px-2">
+                <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
+                    <h5>
+                        <i class="fa-regular fa-user"></i>
+                        {{ player.username }}
+                    </h5>
+                    <div class="btn-group mb-2">
+                        <a href="/players/{{ player.id }}" class="btn btn-success" role="button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Details
+                        </a>
+                        <a href="/players/{{ player.id }}/edit" class="btn btn-secondary" role="button">
+                            <i class="fa-solid fa-gears"></i>
+                            Edit
+                        </a>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <label for="player-{{ player.id }}-id" class="input-group-text">id</label>
+                    <input id="player-{{ player.id }}-id" class="form-control" aria-label="id" value="{{ player.id }}" readonly />
+                </div>
+                <div class="input-group mb-2">
+                    <label for="player-{{ player.id }}-username" class="input-group-text">username</label>
+                    <input id="player-{{ player.id }}-username" class="form-control" aria-label="username" value="{{ player.username }}" readonly />
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

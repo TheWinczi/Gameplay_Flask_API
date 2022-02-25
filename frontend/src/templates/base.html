@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Gameplay Application</title>
+  {% if title %}
+    <title>Gameplay Application - {{ title }}</title>
+  {% else %}
+    <title>Gameplay Application</title>
+  {% endif %}
 
   <!-- Bootstrap CSS -->
   <link href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
@@ -35,7 +39,17 @@
 
   <!-- block for main content of the page -->
   <div class="container">
-      {% block content %}{% endblock %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+          {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
   </div>
 
 

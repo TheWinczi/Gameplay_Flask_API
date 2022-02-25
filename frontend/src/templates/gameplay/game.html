@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if game %}
+        <div class="bg-light mb-3 py-2 px-2">
+            <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
+                <h3>
+                    <i class="fa-solid fa-gamepad"></i>
+                    Details of game with id - {{ game.id }}
+                </h3>
+                <a href="/games/{{ game.id }}/edit" class="btn btn-secondary mb-2" role="button">
+                    <i class="fa-solid fa-gears"></i>
+                    Edit
+                </a>
+            </div>
+            <div class="input-group mb-2">
+                <label for="game-{{ game.id }}-id" class="input-group-text">id</label>
+                <input id="game-{{ game.id }}-id" type="text" class="form-control" aria-label="id" value="{{ game.id }}" readonly />
+            </div>
+            <div class="input-group mb-2">
+                <label for="game-{{ game.id }}-description" class="input-group-text">description</label>
+                <input id="game-{{ game.id }}-description" type="text" class="form-control" aria-label="id" value="{{ game.description }}" readonly />
+            </div>
+            <div class="input-group mb-2">
+                <label for="game-{{ game.id }}-date-created" class="input-group-text">date created</label>
+                <input id="game-{{ game.id }}-date-created" type="datetime-local" class="form-control" aria-label="id" value="{{ game.date_created[:-10] }}" readonly />
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

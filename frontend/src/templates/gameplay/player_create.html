@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
+        <h3>
+            <i class="fa-solid fa-circle-plus"></i>
+            Create New Player
+        </h3>
+        <a href="/players" role="button" class="btn btn-secondary mb-2">Cancel</a>
+    </div>
+
+    <div class="w-50 m-auto">
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="form-floating mb-3">
+                {{ form.username(class="form-control", placeholder="Username") }}
+                {{ form.username.label(class="form-control-label") }}
+
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <div id="username-help" class="form-text">{{ error }}</div>
+                    {% endfor %}
+                {% else %}
+                    <div id="username-help" class="form-text">Required, length have to be between 2 and 50 signs</div>
+                {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.image_file(class="form-control", placeholder="Image File") }}
+                {{ form.image_file.label(class="form-control-label") }}
+
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <div id="image-file-help" class="form-text">{{ error }}</div>
+                    {% endfor %}
+                {% else %}
+                    <div id="image-file-help" class="form-text">Optional, length have to be between 2 and 30 signs</div>
+                {% endif %}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+

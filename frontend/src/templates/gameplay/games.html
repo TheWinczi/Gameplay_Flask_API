@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2 px-2">
+        <h3>
+            All existing games
+        </h3>
+        <a href="/games/create" class="btn btn-info mb-2" role="button">
+            <i class="fa-solid fa-circle-plus"></i>
+            Create Game
+        </a>
+    </div>
     {% if games %}
         {% for game in games %}
             <div class="bg-light mb-3 py-2 px-2">

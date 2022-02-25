@@ -4,8 +4,8 @@
 
     <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
         <h3>
-            <i class="fa-solid fa-gears"></i>
-            Edit Player
+            <i class="fa-solid fa-circle-plus"></i>
+            Create New Player
         </h3>
         <a href="/players" role="button" class="btn btn-secondary mb-2">Cancel</a>
     </div>
@@ -15,7 +15,7 @@
             {{ form.hidden_tag() }}
 
             <div class="form-floating mb-3">
-                {{ form.username(class="form-control", placeholder="Username", value=player.username) }}
+                {{ form.username(class="form-control", placeholder="Username") }}
                 {{ form.username.label(class="form-control-label") }}
 
                 {% if form.username.errors %}
@@ -27,7 +27,7 @@
                 {% endif %}
             </div>
             <div class="form-floating mb-3">
-                {{ form.image_file(class="form-control", placeholder="Image File", value=player.image_file) }}
+                {{ form.image_file(class="form-control", placeholder="Image File") }}
                 {{ form.image_file.label(class="form-control-label") }}
 
                 {% if form.username.errors %}

@@ -32,6 +32,10 @@
                         {{ player.username }}
                     </h5>
                     <div class="btn-group mb-2">
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/remove" class="btn btn-info" role="button">
+                            <i class="fa-solid fa-circle-minus"></i>
+                            Remove
+                        </a>
                         <a href="/players/{{ player.id }}" class="btn btn-success" role="button">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             Details
@@ -53,5 +57,12 @@
             </div>
         {% endfor %}
     {% endif %}
+
+    <div class="m-auto align-items-center text-center">
+        <a href="" id="add-game-player-btn" class="btn btn-info" role="button">
+            <i class="fa-solid fa-circle-plus"></i>
+            Add New Player
+        </a>
+    </div>
 
 {% endblock %}

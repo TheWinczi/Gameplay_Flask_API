@@ -25,5 +25,6 @@ def create_app(test_config=None):
         pass
 
     import frontend.src.gameplay.views
+    import frontend.src.errors.views
 
     return app

@@ -4,7 +4,7 @@ from api_games.src.player.requests_parsers.requests_parsers import *
 from api_games.src.player.models.models import Player
 from api_games.src.decorators.logging import log_info
 
-from flask import Response
+from flask import Response, request
 from flask_restful import Resource
 
 
@@ -17,7 +17,17 @@ class PlayersAPI(Resource):
 
     @log_info()
     def get(self):
-        players = PlayerService.find_all()
+        if "in-game" in request.args.keys():
+            in_game = request.args.get("in-game", None)
+            if in_game == '1':
+                players = PlayerService.find_all_in_game()
+            elif in_game == '0':
+                players = PlayerService.find_all_not_in_game()
+            else:
+                players = PlayerService.find_all()
+        else:
+            players = PlayerService.find_all()
+
         return {
             "players": list(
                 map(lambda player: player.to_dict(), players)

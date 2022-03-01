@@ -49,6 +49,40 @@ class PlayerServiceTests(unittest.TestCase):
             for player in players:
                 self.assertTrue(isinstance(player, Player), f"Returned players should be instances of Player not {type(player)}")
 
+    def test_get_all_players_being_not_in_game(self):
+        with patch('api_games.src.player.repository.player_repository.PlayerRepository.find_all') as mocked_repo:
+            mocked_repo.return_value = [
+                Player(id=1, username="Player 1", game_id=1),
+                Player(id=2, username="Player 2", game_id=None),
+                Player(id=3, username="Player 3", game_id=1),
+            ]
+            players = PlayerService.find_all_not_in_game()
+            mocked_repo.assert_called_once()
+
+            self.assertTrue(isinstance(players, list),
+                            f"Returned players object should be instance of list not {type(players)}")
+            self.assertTrue(len(players) == 1, "Should return list with only 1 player")
+            for player in players:
+                self.assertTrue(isinstance(player, Player),
+                                f"Returned players should be instances of Player not {type(player)}")
+
+    def test_get_all_players_being_in_game(self):
+        with patch('api_games.src.player.repository.player_repository.PlayerRepository.find_all') as mocked_repo:
+            mocked_repo.return_value = [
+                Player(id=1, username="Player 1", game_id=None),
+                Player(id=2, username="Player 2", game_id=None),
+                Player(id=3, username="Player 3", game_id=1),
+            ]
+            players = PlayerService.find_all_in_game()
+            mocked_repo.assert_called_once()
+
+            self.assertTrue(isinstance(players, list),
+                            f"Returned players object should be instance of list not {type(players)}")
+            self.assertTrue(len(players) == 1, "Should return list with only 1 player")
+            for player in players:
+                self.assertTrue(isinstance(player, Player),
+                                f"Returned players should be instances of Player not {type(player)}")
+
     def test_create(self):
         with patch('api_games.src.player.repository.player_repository.PlayerRepository.create') as mocked_repo:
             mocked_repo.return_value = 1

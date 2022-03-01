@@ -39,6 +39,40 @@ class PlayerControllerTests(unittest.TestCase):
             self.assertTrue("players" in json.keys(), "Responded json should contain 'players' key")
             self.assertTrue(isinstance(json["players"], list), "Responded json should contain list of players available under 'players' key")
 
+    def test_get_all_players_not_being_in_game(self):
+        with patch('api_games.src.player.service.player_service.PlayerService.find_all_not_in_game') as mocked_service:
+            mocked_service.return_value = [
+                Player(id=1, username="Player 1", game_id=None),
+                Player(id=2, username="Player 2", game_id=None)
+            ]
+            players = self.APP.get('/api/players?in-game=0')
+            mocked_service.assert_called_once()
+
+            json = players.json
+            self.assertTrue(isinstance(json, dict), "Should be possible to convert responded object to dictionary")
+            self.assertEqual(players.status_code, 200, "Response code of getting existing players should be equal 200")
+            self.assertTrue("players" in json.keys(), "Responded json should contain 'players' key")
+            self.assertTrue(isinstance(json["players"], list),
+                            "Responded json should contain list of players available under 'players' key")
+            self.assertTrue(len(json.get("players", [])) == 2, "Should return list of 2 Players")
+
+    def test_get_all_players_being_in_game(self):
+        with patch('api_games.src.player.service.player_service.PlayerService.find_all_in_game') as mocked_service:
+            mocked_service.return_value = [
+                Player(id=1, username="Player 1", game_id=1),
+                Player(id=2, username="Player 2", game_id=2)
+            ]
+            players = self.APP.get('/api/players?in-game=1')
+            mocked_service.assert_called_once()
+
+            json = players.json
+            self.assertTrue(isinstance(json, dict), "Should be possible to convert responded object to dictionary")
+            self.assertEqual(players.status_code, 200, "Response code of getting existing players should be equal 200")
+            self.assertTrue("players" in json.keys(), "Responded json should contain 'players' key")
+            self.assertTrue(isinstance(json["players"], list),
+                            "Responded json should contain list of players available under 'players' key")
+            self.assertTrue(len(json.get("players", [])) == 2, "Should return list of 2 Players")
+
     def test_get_existing_player_with_id(self):
         with patch('api_games.src.player.service.player_service.PlayerService.find') as mocked_service:
             mocked_service.return_value = Player(id=1, username="Player 1")

@@ -50,6 +50,38 @@ class PlayerService(object):
 
     @staticmethod
     @log_info()
+    def find_all_in_game():
+        """ Find all existing Players being in a Game in database.
+
+        Returns
+        -------
+        players : list[Player]
+            List of founded Player objects being in a Game.
+        """
+        players = PlayerRepository.find_all()
+        players = list(
+            filter(lambda player: player.game_id is not None, players)
+        )
+        return players
+
+    @staticmethod
+    @log_info()
+    def find_all_not_in_game():
+        """ Find all existing Players not being in any Game in database.
+
+        Returns
+        -------
+        players : list[Player]
+            List of founded Player objects not being in any Game.
+        """
+        players = PlayerRepository.find_all()
+        players = list(
+            filter(lambda player: player.game_id is None, players)
+        )
+        return players
+
+    @staticmethod
+    @log_info()
     def create(player: Player,
                fail_return_value=FAIL_RETURN_VALUE):
         """ Create new instance of Player object in database.

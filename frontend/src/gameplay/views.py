@@ -1,20 +1,28 @@
 import requests
-from flask import Flask, render_template, Response, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request, abort
 
 from frontend.src import app
 from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL
 from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, EditGameForm
-# app = Flask(None)
 
 
 @app.route("/", methods=("GET",))
-def main():
-    return render_template("gameplay/main.html")
+def home():
+    return render_template("gameplay/home.html")
+
+
+@app.route("/about", methods=("GET",))
+def about():
+    return render_template("gameplay/about.html")
 
 
 @app.route("/games", methods=("GET",))
 def all_games():
-    games = requests.get(f"{GAMES_SERVER_URL}api/games").json()
+    games = requests.get(f"{GAMES_SERVER_URL}api/games")
+    if games.status_code != 200:
+        abort(status=games.status_code)
+
+    games = games.json()
     if "games" in games.keys():
         games = games["games"]
     else:
@@ -22,41 +30,70 @@ def all_games():
     return render_template("gameplay/games.html", games=games)
 
 
-@app.route("/games/<int:id>", methods=("GET",))
-def particular_game(id: int):
-    game = requests.get(f"{GAMES_SERVER_URL}api/games/{id}")
-    if game.status_code == 200:
-        game = game.json()
-    else:
-        game = None
+@app.route("/games/<int:game_id>", methods=("GET",))
+def particular_game(game_id: int):
+    game = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}")
+    if game.status_code != 200:
+        abort(game.status_code)
+
+    game = game.json()
     return render_template("gameplay/game.html", game=game)
 
 
 @app.route("/games/<int:game_id>/players")
 def particular_game_players(game_id: int):
     game = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}")
-    if game.status_code == 200:
-        game = game.json()
-    else:
-        game = None
+    if game.status_code != 200:
+        abort(game.status_code)
+    game = game.json()
 
     players = requests.get(f"{GAMES_SERVER_URL}/api/games/{game_id}/players")
-    if players.status_code == 200:
-        players = players.json()
-        if "players" in players.keys():
-            players = players["players"]
-        else:
-            players = []
+    if players.status_code != 200:
+        abort(players.status_code)
+    players = players.json()
+
+    if "players" in players.keys():
+        players = players["players"]
     else:
         players = []
     return render_template("gameplay/game_players.html", game=game, players=players)
 
 
+@app.route("/games/<int:game_id>/add-new-player", methods=("GET", "POST"))
+def add_player_to_game(game_id: int):
+    game = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}")
+    if game.status_code != 200:
+        abort(game.status_code)
+    game = game.json()
+
+    players_not_in_game = requests.get(f"{GAMES_SERVER_URL}api/players?in-game=0")
+    if players_not_in_game.status_code != 200:
+        abort(players_not_in_game.status_code)
+    players_not_in_game = players_not_in_game.json()
+
+    if "players" in players_not_in_game.keys():
+        players_not_in_game = players_not_in_game["players"]
+    else:
+        players_not_in_game = []
+    return render_template("gameplay/game_add_player.html", players=players_not_in_game, game=game)
+
+
+@app.route("/games/<int:game_id>/add-new-player/<int:player_id>")
+def add_particular_player_to_game(game_id: int, player_id: int):
+    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
+        "game_id": game_id
+    })
+    if r.status_code == 202:
+        flash("Adding player succeed", 'success')
+    else:
+        flash("Adding player failed", 'danger')
+
+    return redirect(url_for("particular_game_players", game_id=game_id))
+
+
 @app.route("/games/<int:game_id>/players/<int:player_id>/remove")
 def remove_player_from_game(game_id: int, player_id: int):
-    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
-        "game_id": -1
-    })
+    r = requests.delete(f"{GAMES_SERVER_URL}api/games/{game_id}/players/{player_id}")
     if r.status_code == 202:
         flash("Removing from game succeed", 'success')
     else:
@@ -104,7 +141,12 @@ def create_game():
 
 @app.route("/players", methods=("GET",))
 def all_players():
-    players = requests.get(f"{PLAYERS_SERVER_URL}api/players").json()
+    players = requests.get(f"{PLAYERS_SERVER_URL}api/players")
+
+    if players.status_code != 200:
+        abort(players.status_code)
+    players = players.json()
+
     if "players" in players.keys():
         players = players["players"]
     else:
@@ -112,13 +154,12 @@ def all_players():
     return render_template("gameplay/players.html", players=players)
 
 
-@app.route("/players/<int:id>", methods=("GET",))
-def particular_player(id: int):
-    player = requests.get(f"{PLAYERS_SERVER_URL}api/players/{id}")
-    if player.status_code == 200:
-        player = player.json()
-    else:
-        player = None
+@app.route("/players/<int:player_id>", methods=("GET",))
+def particular_player(player_id: int):
+    player = requests.get(f"{PLAYERS_SERVER_URL}api/players/{player_id}")
+    if player.status_code != 200:
+        abort(player.status_code)
+    player = player.json()
     return render_template("gameplay/player.html", player=player)
 
 
@@ -159,8 +200,3 @@ def edit_player(player_id: int):
     else:
         player = requests.get(f"{PLAYERS_SERVER_URL}api/players/{player_id}").json()
         return render_template("gameplay/player_edit.html", form=form, player=player)
-
-
-@app.route("/about", methods=("GET",))
-def about():
-    return render_template("gameplay/about.html")

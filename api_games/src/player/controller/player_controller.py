@@ -67,6 +67,8 @@ class PlayersByIdAPI(Resource):
         if player:
             if "username" in args and args["username"] is not None:
                 player.username = args["username"]
+            if "score" in args and args["score"] is not None:
+                player.score = args["score"]
             if "game_id" in args and args["game_id"] is not None:
                 if not GameService.find(args["game_id"]):
                     return Response(status=404)

@@ -14,7 +14,10 @@ class PlayerEvent(object):
         data = {
             "username": player.username
         }
-        requests.post(url, data)
+        try:
+            requests.post(url, data)
+        except requests.exceptions.ConnectionError:
+            pass
 
     @staticmethod
     def delete(id: int):

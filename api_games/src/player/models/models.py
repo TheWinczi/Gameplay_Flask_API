@@ -14,14 +14,16 @@ class Player(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False)
+    score = db.Column(db.Integer, nullable=False, default=0)
     game_id = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=True)
 
     def to_dict(self):
         return {
             "id": self.id,
             "username": self.username,
+            "score": self.score,
             "game_id": self.game_id
         }
 
     def __repr__(self):
-        return f"Player(id={self.id}, username={self.username})"
+        return f"Player(id={self.id}, username={self.username}, score={self.score})"

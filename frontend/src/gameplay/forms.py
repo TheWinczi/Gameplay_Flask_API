@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, Length, Optional
@@ -17,8 +18,8 @@ class AddPlayerForm(FlaskForm):
     """
     username = StringField("Username",
                            validators=[DataRequired(), Length(min=2, max=50)])
-    image_file = StringField("Image File",
-                             validators=[Optional(), Length(min=2, max=30)])
+    image_file = FileField("Image File",
+                           validators=[FileAllowed(['jpg', 'jpeg', 'png', 'bmp'])])
     submit = SubmitField("Add")
 
 
@@ -47,8 +48,8 @@ class EditPlayerForm(FlaskForm):
     """
     username = StringField("Username",
                            validators=[DataRequired(), Length(min=2, max=50)])
-    image_file = StringField("Image File",
-                             validators=[Optional(), Length(min=2, max=30)])
+    image_file = FileField("Image File",
+                           validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png', 'bmp'])])
     submit = SubmitField("Save")
 
 

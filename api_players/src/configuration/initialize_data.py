@@ -11,9 +11,9 @@ def _initialize_players():
     configuration and adds these to database.
     """
     players = [
-        Player(username="Player 1", image_file="the_best.png"),
+        Player(username="Player 1", image_file="default_player_image.png"),
         Player(username="Player 2"),
-        Player(username="Player 3", image_file="def.png")
+        Player(username="Player 3")
     ]
 
     for player in players:

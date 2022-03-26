@@ -24,3 +24,6 @@ SECRET_KEY = "absolutely_secret_key"
 # Other services addresses
 GAMES_SERVER_URL = "http://localhost:8082/"
 PLAYERS_SERVER_URL = "http://localhost:8081/"
+
+MAX_CONTENT_SIZE = 200 * 200
+PLAYER_IMAGE_FILE_ALLOWED_EXTENSIONS = (".png", ".jpeg", ".jpg", ".bmp")

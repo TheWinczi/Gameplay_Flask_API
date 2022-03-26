@@ -4,6 +4,7 @@ from flask import render_template, flash, redirect, url_for, request, abort
 from frontend.src import app
 from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL
 from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, EditGameForm
+from frontend.src.gameplay.validators import is_player_image_valid
 
 
 @app.route("/", methods=("GET",))
@@ -47,7 +48,7 @@ def particular_game_players(game_id: int):
         abort(game.status_code)
     game = game.json()
 
-    players = requests.get(f"{GAMES_SERVER_URL}/api/games/{game_id}/players")
+    players = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}/players")
     if players.status_code != 200:
         abort(players.status_code)
     players = players.json()
@@ -139,6 +140,42 @@ def create_game():
         return render_template("gameplay/game_create.html", form=form)
 
 
+@app.route("/games/<int:game_id>/players/<int:player_id>/points/add/<int:points>")
+def add_player_points(game_id: int, player_id: int, points: int):
+    player = requests.get(f"{GAMES_SERVER_URL}api/players/{player_id}")
+    if player.status_code != 200:
+        flash("Updating Player Points Failed", 'danger')
+        return redirect(url_for("particular_game_players", game_id=game_id))
+
+    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
+        "score": player.json().get("score", 0) + points
+    })
+
+    if r.status_code == 202:
+        flash("Updating Player Points Succeed", "success")
+    else:
+        flash("Updating Player Points Failed", 'danger')
+    return redirect(url_for("particular_game_players", game_id=game_id))
+
+
+@app.route("/games/<int:game_id>/players/<int:player_id>/points/subtract/<int:points>")
+def subtract_player_points(game_id: int, player_id: int, points: int):
+    player = requests.get(f"{GAMES_SERVER_URL}api/players/{player_id}")
+    if player.status_code != 200:
+        flash("Updating Player Points Failed", 'danger')
+        return redirect(url_for("particular_game_players", game_id=game_id))
+
+    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
+        "score": player.json().get("score", 0) - points
+    })
+
+    if r.status_code == 202:
+        flash("Updating Player Points Succeed", "success")
+    else:
+        flash("Updating Player Points Failed", 'danger')
+    return redirect(url_for("particular_game_players", game_id=game_id))
+
+
 @app.route("/players", methods=("GET",))
 def all_players():
     players = requests.get(f"{PLAYERS_SERVER_URL}api/players")
@@ -160,6 +197,7 @@ def particular_player(player_id: int):
     if player.status_code != 200:
         abort(player.status_code)
     player = player.json()
+    player["image_url"] = f"{PLAYERS_SERVER_URL}{player['image_url']}"
     return render_template("gameplay/player.html", player=player)
 
 
@@ -168,10 +206,20 @@ def create_player():
     form = AddPlayerForm()
 
     if form.validate_on_submit():
-        r = requests.post(f"{PLAYERS_SERVER_URL}api/players", json={
+        if form.image_file.data:
+            pass
+
+        filename = form.image_file.data.filename
+        image = form.image_file.data
+        if not is_player_image_valid(image):
+            flash('Invalid player image', 'danger')
+            return redirect(url_for('create_player'))
+
+        r = requests.post(f"{PLAYERS_SERVER_URL}api/players", data={
             "username": form.username.data,
-            "image_file": form.image_file.data
-        })
+            "image_file": filename
+        }, files={"image": image})
+
         if r.status_code == 201:
             flash("Player Adding Succeed", 'success')
         else:
@@ -187,10 +235,19 @@ def edit_player(player_id: int):
     form = EditPlayerForm()
 
     if form.validate_on_submit():
+        files = {}
+
+        if form.image_file.data is not None:
+            image = form.image_file.data
+            files = {"image": image}
+            if not is_player_image_valid(image):
+                flash('Invalid player image', 'danger')
+                return redirect(url_for('edit_player', player_id=player_id))
+
         r = requests.put(f"{PLAYERS_SERVER_URL}api/players/{player_id}", json={
-            "username": form.username.data,
-            "image_file": form.image_file.data
-        })
+            "username": form.username.data
+        }, files=files)
+
         if r.status_code == 202:
             flash("Player Editing Succeed", 'success')
         else:
@@ -198,5 +255,10 @@ def edit_player(player_id: int):
 
         return redirect(url_for("all_players"))
     else:
-        player = requests.get(f"{PLAYERS_SERVER_URL}api/players/{player_id}").json()
-        return render_template("gameplay/player_edit.html", form=form, player=player)
+        player = requests.get(f"{PLAYERS_SERVER_URL}api/players/{player_id}")
+        if player.status_code == 200:
+            player = player.json()
+            player["image_url"] = f"{PLAYERS_SERVER_URL}{player['image_url']}"
+            return render_template("gameplay/player_edit.html", form=form, player=player)
+        else:
+            abort(player.status_code)

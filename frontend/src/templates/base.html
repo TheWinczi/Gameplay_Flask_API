@@ -11,7 +11,7 @@
   {% endif %}
 
   <!-- Bootstrap CSS -->
-  <link href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='external/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
 
   <!-- block for additional content of head of the page -->
   {% block head %}{% endblock %}
@@ -29,10 +29,10 @@
           <li><a href="/about" class="nav-link btn btn-outline-success px-2 text-white rounded-3" type="button">About</a></li>
         </ul>
 
-        <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Login</button>
-          <button type="button" class="btn btn-warning">Sign-up</button>
-        </div>
+<!--        <div class="text-end">-->
+<!--          <button type="button" class="btn btn-outline-light me-2">Login</button>-->
+<!--          <button type="button" class="btn btn-warning">Sign-up</button>-->
+<!--        </div>-->
       </div>
     </div>
   </header>
@@ -54,9 +54,11 @@
 
 
   <!-- Bootstrap Bundle with Popper -->
-  <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='external/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
   <!-- Fontawesome icons pack -->
-  <script src="{{ url_for('static', filename='js/fontawesome/js/all.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='external/js/fontawesome/js/all.min.js') }}"></script>
+
+  {% block scripts %}{% endblock %}
 </body>
 </html>

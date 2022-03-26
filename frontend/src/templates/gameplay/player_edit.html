@@ -1,17 +1,24 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link href="{{ url_for('static', filename='gameplay/css/styles.css') }}" rel="stylesheet">
+{% endblock %}
+
+
 {% block content %}
 
     <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
+        <div class="mb-2">
+            <img src="{{ player.image_url }}" class="player-image-sm" alt="Player image">
+        </div>
         <h3>
-            <i class="fa-solid fa-gears"></i>
             Edit Player
         </h3>
         <a href="/players" role="button" class="btn btn-secondary mb-2">Cancel</a>
     </div>
 
     <div class="w-50 m-auto">
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
 
             <div class="form-floating mb-3">
@@ -26,16 +33,15 @@
                     <div id="username-help" class="form-text">Required, length have to be between 2 and 50 signs</div>
                 {% endif %}
             </div>
-            <div class="form-floating mb-3">
-                {{ form.image_file(class="form-control", placeholder="Image File", value=player.image_file) }}
-                {{ form.image_file.label(class="form-control-label") }}
+            <div class="form-group mb-3">
+                {{ form.image_file(class="form-control", placeholder="Image File") }}
 
                 {% if form.username.errors %}
                     {% for error in form.username.errors %}
                         <div id="image-file-help" class="form-text">{{ error }}</div>
                     {% endfor %}
                 {% else %}
-                    <div id="image-file-help" class="form-text">Optional, length have to be between 2 and 30 signs</div>
+                    <div id="image-file-help" class="form-text">Optional, image file of the player</div>
                 {% endif %}
             </div>
             <div class="form-group mb-3">

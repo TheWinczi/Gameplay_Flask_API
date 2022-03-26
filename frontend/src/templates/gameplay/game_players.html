@@ -46,13 +46,25 @@
                         </a>
                     </div>
                 </div>
-                <div class="input-group mb-2">
-                    <label for="player-{{ player.id }}-id" class="input-group-text">id</label>
-                    <input id="player-{{ player.id }}-id" class="form-control" aria-label="id" value="{{ player.id }}" readonly />
-                </div>
-                <div class="input-group mb-2">
-                    <label for="player-{{ player.id }}-username" class="input-group-text">username</label>
-                    <input id="player-{{ player.id }}-username" class="form-control" aria-label="username" value="{{ player.username }}" readonly />
+                <div class="px-2 border-bottom">
+                    <div class="input-group mb-2">
+                        <label for="player-{{ player.id }}-id" class="input-group-text">id</label>
+                        <input id="player-{{ player.id }}-id" class="form-control" aria-label="id" value="{{ player.id }}" readonly />
+                    </div>
+                    <div class="input-group mb-2">
+                        <label for="player-{{ player.id }}-username" class="input-group-text">username</label>
+                        <input id="player-{{ player.id }}-username" class="form-control" aria-label="username" value="{{ player.username }}" readonly />
+                    </div>
+                    <div class="input-group mb-2">
+                        <label for="player-{{ player.id }}-score" class="input-group-text">score</label>
+                        <input id="player-{{ player.id }}-score" class="form-control" aria-label="score" value="{{ player.score }}" readonly />
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/1" role="button" class="btn btn-success">+1</a>
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/5" role="button" class="btn btn-success">+5</a>
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/10" role="button" class="btn btn-success">+10</a>
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/1" role="button" class="btn btn-danger">-1</a>
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/5" role="button" class="btn btn-danger">-5</a>
+                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/10" role="button" class="btn btn-danger">-10</a>
+                    </div>
                 </div>
             </div>
         {% endfor %}

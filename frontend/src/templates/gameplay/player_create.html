@@ -11,7 +11,7 @@
     </div>
 
     <div class="w-50 m-auto">
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
 
             <div class="form-floating mb-3">
@@ -26,16 +26,15 @@
                     <div id="username-help" class="form-text">Required, length have to be between 2 and 50 signs</div>
                 {% endif %}
             </div>
-            <div class="form-floating mb-3">
+            <div class="form-group mb-3">
                 {{ form.image_file(class="form-control", placeholder="Image File") }}
-                {{ form.image_file.label(class="form-control-label") }}
 
                 {% if form.username.errors %}
                     {% for error in form.username.errors %}
                         <div id="image-file-help" class="form-text">{{ error }}</div>
                     {% endfor %}
                 {% else %}
-                    <div id="image-file-help" class="form-text">Optional, length have to be between 2 and 30 signs</div>
+                    <div id="image-file-help" class="form-text">Optional, image file of the player</div>
                 {% endif %}
             </div>
             <div class="form-group mb-3">

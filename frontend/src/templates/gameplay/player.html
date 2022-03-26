@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link href="{{ url_for('static', filename='gameplay/css/styles.css') }}" rel="stylesheet">
+{% endblock %}
+
+
 {% block content %}
 
     {% if player %}
         <div class="bg-light mb-3 py-2 px-2">
             <div class="d-flex justify-content-between flex-wrap align-items-center border-bottom pt-2 mb-2">
+                <div class="mb-2">
+                    <img src="{{ player.image_url }}" class="player-image-sm" alt="Player image">
+                </div>
                 <h3>
-                    <i class="fa-regular fa-user"></i>
                     Details of {{ player.username }}
                 </h3>
                 <a href="/players/{{ player.id }}/edit" class="btn btn-secondary mb-2" role="button">

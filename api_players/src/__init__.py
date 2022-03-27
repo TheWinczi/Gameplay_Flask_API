@@ -37,7 +37,7 @@ def create_app(test_config=None):
 
     from api_players.src.player.controller.player_controller import PlayersAPI, PlayersByIdAPI, PlayerByIdImageAPI
     api.add_resource(PlayersAPI, '/api/players')
-    api.add_resource(PlayersByIdAPI, '/api/players/<int:id>')
+    api.add_resource(PlayersByIdAPI, '/api/players/<int:player_id>')
     api.add_resource(PlayerByIdImageAPI, '/api/players/<int:player_id>/image')
 
     # Build the database

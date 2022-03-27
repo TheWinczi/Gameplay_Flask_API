@@ -39,21 +39,21 @@ class GamesByIdAPI(Resource):
     """ Games by id API controller.
     Responsible for getting, updating and deleting games with provided id.
 
-    Source url is /api/games/<int:id>
+    Source url is /api/games/<int:game_id>
     """
 
     @log_info()
-    def get(self, id: int):
-        game = GameService.find(id)
+    def get(self, game_id: int):
+        game = GameService.find(game_id)
         if game:
             return game.to_full_dict()
         else:
             return Response(status=404)
 
     @log_info()
-    def put(self, id: int):
+    def put(self, game_id: int):
         args = game_put_args.parse_args()
-        game = GameService.find(id)
+        game = GameService.find(game_id)
         if game:
             if "description" in args and args["description"] is not None:
                 game.description = args["description"]
@@ -66,10 +66,10 @@ class GamesByIdAPI(Resource):
             return Response(status=404)
 
     @log_info()
-    def delete(self, id: int):
-        game = GameService.find(id)
+    def delete(self, game_id: int):
+        game = GameService.find(game_id)
         if game:
-            result = GameService.delete(id)
+            result = GameService.delete(game_id)
             if result == GameService.SUCCESS_RETURN_VALUE:
                 return Response(status=202)
             else:
@@ -82,12 +82,12 @@ class GamesByIdPlayersAPI(Resource):
     """ Games by id players API controller.
     Responsible for getting players of the game with provided id.
 
-    Source url is /api/games/<int:id>/players
+    Source url is /api/games/<int:game_id>/players
     """
 
     @log_info()
-    def get(self, id: int):
-        game = GameService.find(id)
+    def get(self, game_id: int):
+        game = GameService.find(game_id)
         if game:
             game_players = game.players
             return {
@@ -101,7 +101,7 @@ class GamesByIdPlayersAPI(Resource):
 
 class GamesByIdPlayersByIdAPI(Resource):
     """ Games by id players API controller.
-    Responsible for getting players of the game with provided id.
+    Responsible for management of players of the game with provided id.
 
     Source url is /api/games/<int:game_id>/players/<int:player_id>
     """
@@ -109,13 +109,11 @@ class GamesByIdPlayersByIdAPI(Resource):
     @log_info()
     def delete(self, game_id: int, player_id: int):
         game = GameService.find(game_id)
-        print(game)
         if game:
             game_players = game.players
             player = list(
                 filter(lambda p: p.id == player_id, game_players)
             )
-            print(player)
             if player:
                 for p in player:
                     p.game_id = None
@@ -127,5 +125,5 @@ class GamesByIdPlayersByIdAPI(Resource):
             return Response(status=404)
 
     @log_info()
-    def put(self, id: int):
+    def put(self, game_id: int):
         pass

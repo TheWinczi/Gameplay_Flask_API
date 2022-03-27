@@ -34,7 +34,7 @@ class GameService(object):
         if not isinstance(id, int):
             raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
 
-        return GameRepository.find_by_id(id)
+        return GameRepository.find(id)
 
     @staticmethod
     @log_info()

@@ -28,7 +28,7 @@ class PlayerRepository(object):
 
     @staticmethod
     @log_info()
-    def find_by_id(id: int):
+    def find(id: int):
         """ Find player model with a provided id.
 
         Parameters

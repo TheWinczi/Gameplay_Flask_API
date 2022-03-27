@@ -1,5 +1,5 @@
 import requests
-from flask import render_template, flash, redirect, url_for, request, abort
+from flask import render_template, flash, redirect, url_for, abort
 
 from frontend.src import app
 from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL
@@ -28,7 +28,7 @@ def all_games():
         games = games["games"]
     else:
         games = []
-    return render_template("gameplay/games.html", games=games)
+    return render_template("gameplay/games/games.html", games=games)
 
 
 @app.route("/games/<int:game_id>", methods=("GET",))
@@ -38,7 +38,7 @@ def particular_game(game_id: int):
         abort(game.status_code)
 
     game = game.json()
-    return render_template("gameplay/game.html", game=game)
+    return render_template("gameplay/games/game.html", game=game)
 
 
 @app.route("/games/<int:game_id>/players")
@@ -57,7 +57,7 @@ def particular_game_players(game_id: int):
         players = players["players"]
     else:
         players = []
-    return render_template("gameplay/game_players.html", game=game, players=players)
+    return render_template("gameplay/games/game_players.html", game=game, players=players)
 
 
 @app.route("/games/<int:game_id>/add-new-player", methods=("GET", "POST"))
@@ -76,7 +76,7 @@ def add_player_to_game(game_id: int):
         players_not_in_game = players_not_in_game["players"]
     else:
         players_not_in_game = []
-    return render_template("gameplay/game_add_player.html", players=players_not_in_game, game=game)
+    return render_template("gameplay/games/game_add_player.html", players=players_not_in_game, game=game)
 
 
 @app.route("/games/<int:game_id>/add-new-player/<int:player_id>")
@@ -119,7 +119,7 @@ def edit_game(game_id: int):
     else:
         game = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}").json()
         form.description.data = game.get("description", "")
-        return render_template("gameplay/game_edit.html", form=form, game=game)
+        return render_template("gameplay/games/game_edit.html", form=form, game=game)
 
 
 @app.route("/games/create", methods=("GET", "POST"))
@@ -137,7 +137,7 @@ def create_game():
 
         return redirect(url_for("all_games"))
     else:
-        return render_template("gameplay/game_create.html", form=form)
+        return render_template("gameplay/games/game_create.html", form=form)
 
 
 @app.route("/games/<int:game_id>/players/<int:player_id>/points/add/<int:points>")
@@ -188,7 +188,7 @@ def all_players():
         players = players["players"]
     else:
         players = []
-    return render_template("gameplay/players.html", players=players)
+    return render_template("gameplay/players/players.html", players=players)
 
 
 @app.route("/players/<int:player_id>", methods=("GET",))
@@ -198,7 +198,7 @@ def particular_player(player_id: int):
         abort(player.status_code)
     player = player.json()
     player["image_url"] = f"{PLAYERS_SERVER_URL}{player['image_url']}"
-    return render_template("gameplay/player.html", player=player)
+    return render_template("gameplay/players/player.html", player=player)
 
 
 @app.route("/players/create", methods=("GET", "POST"))
@@ -227,7 +227,7 @@ def create_player():
 
         return redirect(url_for("all_players"))
     else:
-        return render_template("gameplay/player_create.html", form=form)
+        return render_template("gameplay/players/player_create.html", form=form)
 
 
 @app.route("/players/<int:player_id>/edit", methods=["GET", "POST"])
@@ -259,6 +259,6 @@ def edit_player(player_id: int):
         if player.status_code == 200:
             player = player.json()
             player["image_url"] = f"{PLAYERS_SERVER_URL}{player['image_url']}"
-            return render_template("gameplay/player_edit.html", form=form, player=player)
+            return render_template("gameplay/players/player_edit.html", form=form, player=player)
         else:
             abort(player.status_code)

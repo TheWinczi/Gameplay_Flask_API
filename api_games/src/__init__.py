@@ -38,11 +38,11 @@ def create_app(test_config=None):
     from api_games.src.game.controller.game_controller import GamesAPI, GamesByIdAPI, GamesByIdPlayersAPI, GamesByIdPlayersByIdAPI
     from api_games.src.player.controller.player_controller import PlayersAPI, PlayersByIdAPI
     api.add_resource(GamesAPI, '/api/games')
-    api.add_resource(GamesByIdAPI, '/api/games/<int:id>')
-    api.add_resource(GamesByIdPlayersAPI, '/api/games/<int:id>/players')
+    api.add_resource(GamesByIdAPI, '/api/games/<int:game_id>')
+    api.add_resource(GamesByIdPlayersAPI, '/api/games/<int:game_id>/players')
     api.add_resource(GamesByIdPlayersByIdAPI, '/api/games/<int:game_id>/players/<int:player_id>')
     api.add_resource(PlayersAPI, '/api/players')
-    api.add_resource(PlayersByIdAPI, '/api/players/<int:id>')
+    api.add_resource(PlayersByIdAPI, '/api/players/<int:player_id>')
 
     # Build the database
     db.create_all()

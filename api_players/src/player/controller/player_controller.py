@@ -52,12 +52,12 @@ class PlayersByIdAPI(Resource):
     """ Players by id API controller.
     Responsible for getting, updating and deleting players with provided id.
 
-    Source url is /api/players/<int:id>
+    Source url is /api/players/<int:player_id>
     """
 
     @log_info()
-    def get(self, id):
-        player = PlayerService.find(id)
+    def get(self, player_id):
+        player = PlayerService.find(player_id)
         if player:
             player_dict = player.to_full_dict()
             player_dict["image_url"] = f"api/players/{player.id}/image"
@@ -66,9 +66,9 @@ class PlayersByIdAPI(Resource):
             return Response(status=404)
 
     @log_info()
-    def put(self, id: int):
+    def put(self, player_id: int):
         args = player_put_args.parse_args()
-        player = PlayerService.find(id)
+        player = PlayerService.find(player_id)
         if player:
             if "username" in args and args["username"] is not None:
                 player.username = args["username"]
@@ -87,12 +87,12 @@ class PlayersByIdAPI(Resource):
             return Response(status=404)
 
     @log_info()
-    def delete(self, id: int):
-        player = PlayerService.find(id)
+    def delete(self, player_id: int):
+        player = PlayerService.find(player_id)
         if player:
-            result = PlayerService.delete(id)
+            result = PlayerService.delete(player_id)
             if result == PlayerService.SUCCESS_RETURN_VALUE:
-                PlayerEvent.delete(id)
+                PlayerEvent.delete(player_id)
                 return Response(status=202)
             else:
                 return Response(status=500)

@@ -7,7 +7,8 @@ class Player(db.Model):
 
     Player model contains:
     id - id of the player in database.
-    username - username of the player,
+    username - username of the player.
+    score - score of the player in the game.
     """
 
     __tablename__ = "player"

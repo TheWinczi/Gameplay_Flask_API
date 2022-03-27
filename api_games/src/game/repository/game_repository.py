@@ -26,7 +26,7 @@ class GameRepository(object):
 
     @staticmethod
     @log_info()
-    def find_by_id(id: int):
+    def find(id: int):
         """ Find Game model with a provided id.
 
         Parameters

@@ -35,7 +35,7 @@ class PlayerService(object):
         if not isinstance(id, int):
             raise TypeError(f"Illegal type of argument. Id could be only int not {type(id)}")
 
-        return PlayerRepository.find_by_id(id)
+        return PlayerRepository.find(id)
 
     @staticmethod
     @log_info()

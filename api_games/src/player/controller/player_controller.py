@@ -10,7 +10,7 @@ from flask_restful import Resource
 
 class PlayersAPI(Resource):
     """ Players API controller.
-    Responsible for getting all existing players and adding new players.
+    Responsible for management of all existing players and adding new players.
 
     Source url is /api/players
     """
@@ -49,21 +49,21 @@ class PlayersByIdAPI(Resource):
     """ Players by id API controller.
     Responsible for getting, updating and deleting players with provided id.
 
-    Source url is /api/players/<int:id>
+    Source url is /api/players/<int:player_id>
     """
 
     @log_info()
-    def get(self, id: int):
-        player = PlayerService.find(id)
+    def get(self, player_id: int):
+        player = PlayerService.find(player_id)
         if player:
             return player.to_dict()
         else:
             return Response(status=404)
 
     @log_info()
-    def put(self, id: int):
+    def put(self, player_id: int):
         args = player_put_args.parse_args()
-        player = PlayerService.find(id)
+        player = PlayerService.find(player_id)
         if player:
             if "username" in args and args["username"] is not None:
                 player.username = args["username"]
@@ -84,10 +84,10 @@ class PlayersByIdAPI(Resource):
             return Response(status=404)
 
     @log_info()
-    def delete(self, id: int):
-        player = PlayerService.find(id)
+    def delete(self, player_id: int):
+        player = PlayerService.find(player_id)
         if player:
-            result = PlayerService.delete(id)
+            result = PlayerService.delete(player_id)
             if result == PlayerService.SUCCESS_RETURN_VALUE:
                 return Response(status=202)
             else:

@@ -1,0 +1,669 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "An API that allows you to manage games",
+    "version": "1.0.0",
+    "title": "Games API"
+  },
+  "basePath": "api/",
+  "host": "127.0.0.1:8082/",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Games",
+      "description": "Games API endpoints"
+    },
+    {
+      "name": "GamePlayers",
+      "description": "Games Players Endpoints"
+    },
+    {
+      "name": "Players",
+      "description": "Players API Endpoints"
+    }
+  ],
+  "paths": {
+    "/games": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "description": "Get all existing games",
+        "operationId": "getAllGames",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All games response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 1
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "description": "Example game description"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "description": "Add new game",
+        "operationId": "addGame",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "maxLength": 400
+                }
+              },
+              "example": {
+                "description": "Example of game description"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Game created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "location": "/api/games/1"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/games/{game_id}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "description": "Get existing game details",
+        "operationId": "getGame",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Game id to get",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing game response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1
+                },
+                "description": {
+                  "type": "string"
+                },
+                "date_created": {
+                  "type": "string",
+                  "format": "datetime"
+                },
+                "date_modified": {
+                  "type": "string",
+                  "format": "datetime"
+                }
+              },
+              "example": {
+                "id": 1,
+                "description": "Example of Game description",
+                "date_created": "2012-12-12T12:12:12.000Z",
+                "date_modified": "2013-01-01T100:00:01.000Z"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update existing game",
+        "tags": [
+          "Games"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to update",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "maxLength": 400
+                }
+              },
+              "example": {
+                "description": "Updated game description"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Game updated successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "404": {
+            "description": "Game with provided id does not exist"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete existing game",
+        "tags": [
+          "Games"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Game id to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Game deleted successfully"
+          },
+          "404": {
+            "description": "Game with provided id was not found"
+          }
+        }
+      }
+    },
+    "/games/{game_id}/players": {
+      "get": {
+        "description": "Get all players in specific game",
+        "operationId": "getAllGamePlayers",
+        "tags": [
+          "GamePlayers"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All game players response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 1
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "score": {
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "username": "ExampleUsername",
+                  "score": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{game_id}/players/{player_id}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "description": "Get existing game existing player details",
+        "operationId": "getGamePlayer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Game id",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing game existing player response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1
+                },
+                "username": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1
+                }
+              },
+              "example": {
+                "id": 1,
+                "username": "ExampleUsername",
+                "score": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Get all existing players",
+        "operationId": "getAllPlayers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "in_game",
+            "description": "Get players only in game or only not in game",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All players response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 1
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "score": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "game_id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "ID of the game to which player belongs to"
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "username": "ExampleUsername",
+                  "score": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Add new player",
+        "operationId": "addPlayer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "game_id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "ID of the game to which player belongs to"
+                }
+              },
+              "example": {
+                "username": "ExampleUsername",
+                "game_id": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "location": "/api/players/1"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/players/{player_id}": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Get existing player details",
+        "operationId": "getPlayer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to get",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing player response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1
+                },
+                "username": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "score": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "game_id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "ID of the game to which player belongs to"
+                },
+                "date_created": {
+                  "type": "string",
+                  "format": "datetime"
+                },
+                "date_modified": {
+                  "type": "string",
+                  "format": "datetime"
+                }
+              },
+              "example": {
+                "id": 1,
+                "username": "ExampleUsername",
+                "score": 0,
+                "game_id": 1,
+                "date_created": "2012-12-12T12:12:12.000Z",
+                "date_modified": "2013-01-01T100:00:01.000Z"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update existing player",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to update",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "score": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "game_id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "ID of the game to which player belongs to"
+                }
+              },
+              "example": {
+                "username": "ChangedUsername",
+                "score": 10,
+                "game_id": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player updated successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "404": {
+            "description": "Player with provided id does not exist"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete existing player",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player deleted successfully"
+          },
+          "404": {
+            "description": "Player with provided id was not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Game": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "date_created": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "date_modified": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    },
+    "Player": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "username": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

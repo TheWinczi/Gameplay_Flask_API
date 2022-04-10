@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
+from flask_swagger_ui import get_swaggerui_blueprint
 
 import os
 
@@ -53,5 +54,14 @@ def create_app(test_config=None):
     if app.config.get("ENABLE_LOGGING", False):
         if not app.config.get("API_PLAYERS_LOGGING_FILE", False):
             app.config["API_PLAYERS_LOGGING_FILE"] = "instance/api_players_logs.log"
+
+    # Add swagger to url
+    if app.config.get("ADD_SWAGGER", False):
+        swagger_bp = get_swaggerui_blueprint(
+            app.config.get('SWAGGER_URL', '/api/players/swagger'),
+            app.config.get('API_DEFINITION_FILE_URL', '/static/swagger/swagger.json'),
+            config=app.config.get("SWAGGER_CONFIG", {})
+        )
+        app.register_blueprint(swagger_bp)
 
     return app

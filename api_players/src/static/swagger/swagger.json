@@ -1,0 +1,367 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "An API that allows you to manage players",
+    "version": "1.0.0",
+    "title": "Players API"
+  },
+  "basePath": "api/",
+  "host": "127.0.0.1:8081/",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Players",
+      "description": "Players API endpoints"
+    }
+  ],
+  "paths": {
+    "/players": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Get all existing players",
+        "operationId": "getAllPlayers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All players response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 1
+                  },
+                  "username": {
+                    "type": "string",
+                    "maxLength": 50
+                  },
+                  "image_url": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "id": 10,
+                  "username": "ExampleUsername",
+                  "image_url": "/api/players/10/image"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Add new player",
+        "operationId": "addPlayer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "image_file": {
+                  "type": "string",
+                  "maxLength": 30,
+                  "description": "Filename of an image"
+                }
+              },
+              "example": {
+                "username": "ExampleUsername",
+                "image_file": "image.png"
+              }
+            }
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "type": "file",
+            "description": "Player's image"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "location": "/api/players/1"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/players/{player_id}": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Get existing player details",
+        "operationId": "getPlayer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to get",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing player response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1
+                },
+                "username": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "date_created": {
+                  "type": "string",
+                  "format": "datetime"
+                },
+                "date_modified": {
+                  "type": "string",
+                  "format": "datetime"
+                }
+              },
+              "example": {
+                "id": 1,
+                "username": "ExampleUsername",
+                "image_url": "/api/players/1/image",
+                "date_created": "2012-12-12T12:12:12.000Z",
+                "date_modified": "2013-01-01T100:00:01.000Z"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update existing player",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to update",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "maxLength": 50
+                }
+              },
+              "example": {
+                "username": "ChangedUsername"
+              }
+            }
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "type": "file",
+            "description": "Player's image"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player updated successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "404": {
+            "description": "Player with provided id does not exist"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete existing player",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player deleted successfully"
+          },
+          "404": {
+            "description": "Player with provided id was not found"
+          }
+        }
+      }
+    },
+    "/players/{player_id}/image": {
+      "get": {
+        "description": "Get existing player's image",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "type": "file",
+            "description": "Player's image"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player's image",
+            "schema": {
+              "type": "file",
+              "format": "bytes"
+            }
+          },
+          "404": {
+            "description": "Player with provided id was not found"
+          }
+        }
+      },
+      "put": {
+        "description": "Update existing player's image",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id to image update",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "type": "file",
+            "description": "Player's image"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player's image updated successfully"
+          },
+          "404": {
+            "description": "Player with provided id was not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Player": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "username": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "image_file": {
+          "type": "image",
+          "format": "bytes"
+        },
+        "date_created": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "date_modified": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    }
+  }
+}

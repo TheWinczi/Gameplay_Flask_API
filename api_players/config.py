@@ -38,3 +38,11 @@ GAME_SERVER_URL = "http://localhost:8082/"
 
 # Directory path for storing players images
 PLAYERS_IMAGES_DIR = os.path.join(BASE_DIR, "src", "static")
+
+# Swagger configuration
+ADD_SWAGGER = True
+SWAGGER_URL = '/api/swagger'
+API_DEFINITION_FILE_URL = '/static/swagger/swagger.json'
+SWAGGER_CONFIG = {
+    'app name': 'Players API Swagger'
+}

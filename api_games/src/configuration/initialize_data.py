@@ -1,8 +1,13 @@
-from api_games.src.player.models.models import Player
-from api_games.src.player.service.player_service import PlayerService
+import random
 
 from api_games.src.game.models.models import Game
 from api_games.src.game.service.game_service import GameService
+
+from api_games.src.player.models.models import Player
+from api_games.src.player.service.player_service import PlayerService
+
+from api_games.src.playing.models.models import Playing
+from api_games.src.playing.service.playing_service import PlayingService
 
 
 def _initialize_players():
@@ -10,8 +15,8 @@ def _initialize_players():
 
     Returns
     -------
-    players_ids : list[int]
-        Created players ids list.
+    players : list[Player]
+        List of players added to database.
 
     Notes
     -----
@@ -19,17 +24,15 @@ def _initialize_players():
     configuration and adds these to database.
     """
     players = [
-        Player(username="Player 1", game_id=1),
-        Player(username="Player 2", game_id=1),
-        Player(username="Player 3", game_id=2)
+        Player(username="Player 1"),
+        Player(username="Player 2"),
+        Player(username="Player 3")
     ]
 
-    players_ids = []
-
     for player in players:
-        players_ids.append(PlayerService.create(player))
+        PlayerService.create(player)
 
-    return players_ids
+    return players
 
 
 def _initialize_games():
@@ -37,8 +40,8 @@ def _initialize_games():
 
     Returns
     -------
-    games_ids : list[int]
-        Created games ids list.
+    games : list[Game]
+        List of games added to database.
 
     Notes
     -----
@@ -50,12 +53,34 @@ def _initialize_games():
         Game(description="This is game number 2")
     ]
 
-    games_ids = []
-
     for game in games:
-        games_ids.append(GameService.create(game))
+        GameService.create(game)
 
-    return games_ids
+    return games
+
+
+def _initialize_playings(games: list[Game], players: list[Player]):
+    """ Initialize playings models.
+
+    Returns
+    -------
+    playings : list[Playing]
+        List of playings added to database.
+
+    Notes
+    -----
+    Function adds provided players to games choose randomly.
+    """
+    if len(games) <= 0 or len(players) <= 0:
+        return
+
+    playings = []
+
+    for player in players:
+        game = random.choice(games)
+        PlayingService.connect_player_and_game(player, game, score=100)
+
+    return playings
 
 
 def initialize_models():
@@ -71,5 +96,6 @@ def initialize_models():
         1. Games
         2. players
     """
-    _initialize_games()
-    _initialize_players()
+    games = _initialize_games()
+    players = _initialize_players()
+    playings = _initialize_playings(games, players)

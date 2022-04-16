@@ -36,8 +36,9 @@ def create_app(test_config=None):
     global api
     api = Api(app)
 
-    from api_games.src.game.controller.game_controller import GamesAPI, GamesByIdAPI, GamesByIdPlayersAPI, GamesByIdPlayersByIdAPI
+    from api_games.src.game.controller.game_controller import GamesAPI, GamesByIdAPI, GamesByIdPlayersAPI
     from api_games.src.player.controller.player_controller import PlayersAPI, PlayersByIdAPI
+    from api_games.src.playing.controller.playing_controller import GamesByIdPlayersByIdAPI
     api.add_resource(GamesAPI, '/api/games')
     api.add_resource(GamesByIdAPI, '/api/games/<int:game_id>')
     api.add_resource(GamesByIdPlayersAPI, '/api/games/<int:game_id>/players')

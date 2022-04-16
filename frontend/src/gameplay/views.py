@@ -48,7 +48,7 @@ def particular_game_players(game_id: int):
         abort(game.status_code)
     game = game.json()
 
-    players = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}/players")
+    players = requests.get(f"{GAMES_SERVER_URL}api/players?in-game={game_id}")
     if players.status_code != 200:
         abort(players.status_code)
     players = players.json()
@@ -67,7 +67,7 @@ def add_player_to_game(game_id: int):
         abort(game.status_code)
     game = game.json()
 
-    players_not_in_game = requests.get(f"{GAMES_SERVER_URL}api/players?in-game=0")
+    players_not_in_game = requests.get(f"{GAMES_SERVER_URL}api/players?not-in-game={game_id}")
     if players_not_in_game.status_code != 200:
         abort(players_not_in_game.status_code)
     players_not_in_game = players_not_in_game.json()
@@ -81,10 +81,8 @@ def add_player_to_game(game_id: int):
 
 @app.route("/games/<int:game_id>/add-new-player/<int:player_id>")
 def add_particular_player_to_game(game_id: int, player_id: int):
-    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
-        "game_id": game_id
-    })
-    if r.status_code == 202:
+    r = requests.post(f"{GAMES_SERVER_URL}api/games/{game_id}/players/{player_id}")
+    if r.status_code == 201:
         flash("Adding player succeed", 'success')
     else:
         flash("Adding player failed", 'danger')
@@ -142,12 +140,12 @@ def create_game():
 
 @app.route("/games/<int:game_id>/players/<int:player_id>/points/add/<int:points>")
 def add_player_points(game_id: int, player_id: int, points: int):
-    player = requests.get(f"{GAMES_SERVER_URL}api/players/{player_id}")
+    player = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}/players/{player_id}")
     if player.status_code != 200:
         flash("Updating Player Points Failed", 'danger')
         return redirect(url_for("particular_game_players", game_id=game_id))
 
-    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
+    r = requests.put(f"{GAMES_SERVER_URL}api/games/{game_id}/players/{player_id}", json={
         "score": player.json().get("score", 0) + points
     })
 
@@ -160,12 +158,12 @@ def add_player_points(game_id: int, player_id: int, points: int):
 
 @app.route("/games/<int:game_id>/players/<int:player_id>/points/subtract/<int:points>")
 def subtract_player_points(game_id: int, player_id: int, points: int):
-    player = requests.get(f"{GAMES_SERVER_URL}api/players/{player_id}")
+    player = requests.get(f"{GAMES_SERVER_URL}api/games/{game_id}/players/{player_id}")
     if player.status_code != 200:
         flash("Updating Player Points Failed", 'danger')
         return redirect(url_for("particular_game_players", game_id=game_id))
 
-    r = requests.put(f"{GAMES_SERVER_URL}api/players/{player_id}", json={
+    r = requests.put(f"{GAMES_SERVER_URL}api/games/{game_id}/players/{player_id}", json={
         "score": player.json().get("score", 0) - points
     })
 

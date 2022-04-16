@@ -279,16 +279,11 @@
                   },
                   "username": {
                     "type": "string"
-                  },
-                  "score": {
-                    "type": "integer",
-                    "format": "int32"
                   }
                 },
                 "example": {
                   "id": 1,
                   "username": "ExampleUsername",
-                  "score": 0
                 }
               }
             }
@@ -356,6 +351,162 @@
                 "score": 0
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "description": "Add the player to the game",
+        "operationId": "addPlayerToGame",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "score": 0
+              }
+            }
+          },
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Game id",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player was added successfully"
+          },
+          "404": {
+            "description": "Player or game with provided ID was no found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "description": "Update the player in the game",
+        "operationId": "updatePlayerInGame",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "score": 0
+              }
+            }
+          },
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Game id",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player was updated successfully"
+          },
+          "404": {
+            "description": "Player or game with provided ID was no found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete the player from the game",
+        "tags": [
+          "GamePlayers"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "game_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Game id",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "player_id",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            },
+            "description": "Player id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Player deleted from game successfully"
+          },
+          "404": {
+            "description": "Player or game with provided id was not found"
           }
         }
       }

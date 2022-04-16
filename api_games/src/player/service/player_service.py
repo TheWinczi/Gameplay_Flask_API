@@ -50,7 +50,7 @@ class PlayerService(object):
 
     @staticmethod
     @log_info()
-    def find_all_in_game():
+    def find_all_in_game(game_id):
         """ Find all existing Players being in a Game in database.
 
         Returns
@@ -60,13 +60,15 @@ class PlayerService(object):
         """
         players = PlayerRepository.find_all()
         players = list(
-            filter(lambda player: player.game_id is not None, players)
+            filter(lambda player: game_id in list(
+                map(lambda playing: playing.game_id, player.games)
+            ), players)
         )
         return players
 
     @staticmethod
     @log_info()
-    def find_all_not_in_game():
+    def find_all_not_in_game(game_id):
         """ Find all existing Players not being in any Game in database.
 
         Returns
@@ -76,7 +78,9 @@ class PlayerService(object):
         """
         players = PlayerRepository.find_all()
         players = list(
-            filter(lambda player: player.game_id is None, players)
+            filter(lambda player: game_id not in list(
+                map(lambda playing: playing.game_id, player.games)),
+            players)
         )
         return players
 

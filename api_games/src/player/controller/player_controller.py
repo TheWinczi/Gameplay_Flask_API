@@ -18,21 +18,19 @@ class PlayersAPI(Resource):
     @log_info()
     def get(self):
         if "in-game" in request.args.keys():
-            in_game = request.args.get("in-game", None)
-            if in_game == '1':
-                players = PlayerService.find_all_in_game()
-            elif in_game == '0':
-                players = PlayerService.find_all_not_in_game()
-            else:
-                players = PlayerService.find_all()
+            game_id = int(request.args.get("in-game", 0))
+            players = PlayerService.find_all_in_game(game_id)
+            return {'players': list(map(lambda player: player.dict_with_score(game_id), players))}
+        elif 'not-in-game' in request.args.keys():
+            game_id = int(request.args.get("not-in-game", 0))
+            players = PlayerService.find_all_not_in_game(game_id)
+            return {'players': list(map(lambda player: player.dict_with_score(game_id), players))}
         else:
             players = PlayerService.find_all()
 
-        return {
-            "players": list(
-                map(lambda player: player.to_dict(), players)
-            )
-        }, 200
+        return {"players": list(
+            map(lambda player: player.to_dict(), players))
+        }
 
     @log_info()
     def post(self):

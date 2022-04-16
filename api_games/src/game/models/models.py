@@ -22,7 +22,7 @@ class Game(Base):
     __tablename__ = "game"
 
     description = db.Column(db.String(400), nullable=True, default="")
-    players = db.relationship("Player", backref="game")
+    players = db.relationship('Playing', back_populates='game')
 
     def to_short_dict(self):
         return {

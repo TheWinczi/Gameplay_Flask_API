@@ -34,7 +34,7 @@ ENABLE_LOGGING = True
 API_PLAYERS_LOGGING_FILE = "instance/api_players_logs.log"
 
 # Other services addresses
-GAME_SERVER_URL = "http://localhost:8082/"
+GAME_SERVER_URL = "http://127.0.0.1:8082/"
 
 # Directory path for storing players images
 PLAYERS_IMAGES_DIR = os.path.join(BASE_DIR, "src", "static")

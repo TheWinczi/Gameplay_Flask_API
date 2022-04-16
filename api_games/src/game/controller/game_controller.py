@@ -1,5 +1,4 @@
 from api_games.src.game.service.game_service import GameService
-from api_games.src.player.service.player_service import PlayerService
 from api_games.src.game.requests_parsers.requests_parsers import *
 from api_games.src.game.models.models import Game
 from api_games.src.decorators.logging import log_info
@@ -89,7 +88,10 @@ class GamesByIdPlayersAPI(Resource):
     def get(self, game_id: int):
         game = GameService.find(game_id)
         if game:
-            game_players = game.players
+            game_players = list(
+                map(lambda playing: playing.player, game.players)
+            )
+
             return {
                 "players": list(
                     map(lambda player: player.to_dict(), game_players)
@@ -97,33 +99,3 @@ class GamesByIdPlayersAPI(Resource):
             }, 200
         else:
             return Response(status=404)
-
-
-class GamesByIdPlayersByIdAPI(Resource):
-    """ Games by id players API controller.
-    Responsible for management of players of the game with provided id.
-
-    Source url is /api/games/<int:game_id>/players/<int:player_id>
-    """
-
-    @log_info()
-    def delete(self, game_id: int, player_id: int):
-        game = GameService.find(game_id)
-        if game:
-            game_players = game.players
-            player = list(
-                filter(lambda p: p.id == player_id, game_players)
-            )
-            if player:
-                for p in player:
-                    p.game_id = None
-                    PlayerService.update(p)
-                return Response(status=202)
-            else:
-                return Response(status=404)
-        else:
-            return Response(status=404)
-
-    @log_info()
-    def put(self, game_id: int):
-        pass

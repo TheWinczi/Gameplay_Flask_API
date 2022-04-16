@@ -1,4 +1,3 @@
-# Import db from root src module
 from api_games.src import db
 
 
@@ -15,16 +14,24 @@ class Player(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False)
-    score = db.Column(db.Integer, nullable=False, default=0)
-    game_id = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=True)
+    games = db.relationship('Playing', back_populates='player')
 
     def to_dict(self):
         return {
             "id": self.id,
-            "username": self.username,
-            "score": self.score,
-            "game_id": self.game_id
+            "username": self.username
         }
 
+    def dict_with_score(self, game_id):
+        dict_form = self.to_dict()
+        game = list(
+            filter(lambda playing: playing.game_id == game_id, self.games)
+        )
+        if not game:
+            return dict_form
+
+        dict_form['score'] = game[0].score
+        return dict_form
+
     def __repr__(self):
-        return f"Player(id={self.id}, username={self.username}, score={self.score})"
+        return f"Player(id={self.id}, username={self.username})"

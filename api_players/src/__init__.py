@@ -42,7 +42,6 @@ def create_app(test_config=None):
     api.add_resource(PlayerByIdImageAPI, '/api/players/<int:player_id>/image')
 
     # Build the database
-    db.drop_all()
     db.create_all()
 
     # Initialize default models objects

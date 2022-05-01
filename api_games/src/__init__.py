@@ -67,4 +67,8 @@ def create_app(test_config=None):
         )
         app.register_blueprint(swagger_bp)
 
+    from api_games.src.player.event.player_event import PlayerEventsHandler
+    events_handler = PlayerEventsHandler()
+    events_handler.start()
+
     return app

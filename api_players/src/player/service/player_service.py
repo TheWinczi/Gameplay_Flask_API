@@ -1,4 +1,5 @@
 from api_players.src.player.repository.player_repository import PlayerRepository
+from api_players.src.player.event.player_event import PlayerEvent
 from api_players.src.player.models.models import Player
 
 from api_players.src.decorators.logging import log_info
@@ -78,6 +79,7 @@ class PlayerService(object):
 
         result = PlayerRepository.create(player)
         if result != PlayerRepository.FAIL_RETURN_VALUE:
+            PlayerEvent.create(player)
             return result
         else:
             return fail_return_value
@@ -116,6 +118,7 @@ class PlayerService(object):
 
         result = PlayerRepository.delete(id)
         if result == PlayerRepository.SUCCESS_RETURN_VALUE:
+            PlayerEvent.delete(id)
             return success_return_value
         elif result == PlayerRepository.FAIL_RETURN_VALUE:
             return fail_return_value
@@ -154,6 +157,7 @@ class PlayerService(object):
 
         result = PlayerRepository.update(player)
         if result == PlayerRepository.SUCCESS_RETURN_VALUE:
+            PlayerEvent.update(player)
             return success_return_value
         elif result == PlayerRepository.FAIL_RETURN_VALUE:
             return fail_return_value

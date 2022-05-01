@@ -42,7 +42,6 @@ class PlayersAPI(Resource):
         player = Player(username=args["username"], image_file=image_fn)
         result = PlayerService.create(player)
         if result != PlayerService.FAIL_RETURN_VALUE:
-            PlayerEvent.create(player)
             return {"location": f"/api/players/{result}"}, 201
         else:
             return Response(status=500)
@@ -92,7 +91,6 @@ class PlayersByIdAPI(Resource):
         if player:
             result = PlayerService.delete(player_id)
             if result == PlayerService.SUCCESS_RETURN_VALUE:
-                PlayerEvent.delete(player_id)
                 return Response(status=202)
             else:
                 return Response(status=500)

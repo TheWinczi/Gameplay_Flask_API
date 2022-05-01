@@ -6,3 +6,4 @@ requests==2.26.0
 SQLAlchemy==1.4.31
 WTForms==3.0.1
 Werkzeug==2.0.3
+pika==1.2.1

@@ -8,7 +8,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 # Define the database - we are working with
 # SQLite for this example
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:' # 'sqlite:///' + os.path.join(BASE_DIR, 'player.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'instance', 'players.db') # 'sqlite:///:memory:'
 DATABASE_CONNECT_OPTIONS = {}
 
 # Application threads. A common general assumption is
@@ -27,7 +27,7 @@ CSRF_SESSION_KEY = "absolutely_secret_csrf_key"
 # Secret key for signing cookies
 SECRET_KEY = "absolutely_secret_key"
 
-INITIALIZE_MODELS = True
+INITIALIZE_MODELS = False
 
 # Variables responsible for logging
 ENABLE_LOGGING = True

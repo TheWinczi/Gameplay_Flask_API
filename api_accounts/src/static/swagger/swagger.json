@@ -1,0 +1,328 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "An API that allows you to accounts management",
+    "version": "1.0.0",
+    "title": "Accounts API"
+  },
+  "basePath": "api/",
+  "host": "127.0.0.1:8083/",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Accounts",
+      "description": "Accounts API endpoints"
+    }
+  ],
+  "paths": {
+    "/accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all existing accounts",
+        "operationId": "getAllAccounts",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All accounts response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 1
+                  },
+                  "login": {
+                    "type": "string",
+                    "maxLength": 50
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "login": "login",
+                  "role": "ADMIN"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Add new account",
+        "operationId": "addAccount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "login": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "password": {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                "role": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "login": "login",
+                "password": "password",
+                "role": "guest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "location": "/api/accounts/1"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/accounts/{login}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get existing account details",
+        "operationId": "getAccount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "login",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Account login to get",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing account response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "login": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "role": {
+                  "type": "string"
+                },
+                "date_created": {
+                  "type": "string",
+                  "format": "datetime"
+                },
+                "date_modified": {
+                  "type": "string",
+                  "format": "datetime"
+                }
+              },
+              "example": {
+                "id": 1,
+                "login": "login",
+                "role": "GUEST",
+                "date_created": "2012-12-12T12:12:12.000Z",
+                "date_modified": "2013-01-01T100:00:01.000Z"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update existing account",
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "login",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Account login to update",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                "role": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "password": "password",
+                "role": "guest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Account updated successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "404": {
+            "description": "Account with provided login does not exist"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete existing account",
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "login",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Account login to delete",
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Account deleted successfully"
+          },
+          "404": {
+            "description": "Account with provided id was not found"
+          }
+        }
+      }
+    },
+    "/accounts/authentication": {
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "login": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "password": {
+                  "type": "string",
+                  "maxLength": 256
+                }
+              },
+              "example": {
+                "login": "login",
+                "password": "password"
+              }
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Authentications succeed"
+          },
+          "401": {
+            "description": "Invalid password"
+          },
+          "404": {
+            "description": "Invalid login"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "login": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "password": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "role": {
+          "type": "string"
+        },
+        "date_created": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "date_modified": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    }
+  }
+}

@@ -5,10 +5,12 @@
         <h3>
             All existing games
         </h3>
-        <a href="/games/create" class="btn btn-info mb-2" role="button">
-            <i class="fa-solid fa-circle-plus"></i>
-            Create Game
-        </a>
+        {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+            <a href="/games/create" class="btn btn-info mb-2" role="button">
+                <i class="fa-solid fa-circle-plus"></i>
+                Create Game
+            </a>
+        {% endif %}
     </div>
     {% if games %}
         {% for game in games %}
@@ -24,10 +26,13 @@
                             <i class="fa-solid fa-magnifying-glass"></i>
                             Details
                         </a>
-                        <a href="/games/{{ game.id }}/edit" class="btn btn-secondary" role="button">
-                            <i class="fa-solid fa-gears"></i>
-                            Edit
-                        </a>
+
+                        {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+                            <a href="/games/{{ game.id }}/edit" class="btn btn-secondary" role="button">
+                                <i class="fa-solid fa-gears"></i>
+                                Edit
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="input-group mb-2">

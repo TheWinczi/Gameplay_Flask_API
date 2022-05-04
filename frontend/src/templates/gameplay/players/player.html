@@ -16,10 +16,12 @@
                 <h3>
                     Details of {{ player.username }}
                 </h3>
-                <a href="/players/{{ player.id }}/edit" class="btn btn-secondary mb-2" role="button">
-                    <i class="fa-solid fa-gears"></i>
-                    Edit
-                </a>
+                {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+                    <a href="/players/{{ player.id }}/edit" class="btn btn-secondary mb-2" role="button">
+                        <i class="fa-solid fa-gears"></i>
+                        Edit
+                    </a>
+                {% endif %}
             </div>
             <div class="input-group mb-2">
                 <label for="player-{{ player.id }}-id" class="input-group-text">id</label>

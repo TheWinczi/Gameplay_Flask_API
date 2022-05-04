@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, Length, Optional
 
@@ -63,3 +63,17 @@ class EditGameForm(FlaskForm):
                                 widget=TextArea(),
                                 validators=[Optional(), Length(min=1, max=400)])
     submit = SubmitField("Save")
+
+
+# ---------- ---------- ----------
+#           SIGNING FORMS
+# ---------- ---------- ----------
+
+class AccountSignInForm(FlaskForm):
+    """ Form allows to sign in.
+    """
+    login = StringField("Login",
+                        validators=[DataRequired(), Length(min=1, max=50)])
+    password = PasswordField("Password",
+                             validators=[DataRequired(), Length(min=1, max=256)])
+    submit = SubmitField("Sing in")

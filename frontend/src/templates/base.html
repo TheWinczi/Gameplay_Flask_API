@@ -23,16 +23,38 @@
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link btn btn-primary px-2 text-white rounded-3" type="button">Home</a></li>
-          <li><a href="/players" class="nav-link px-2 text-white">Players</a></li>
-          <li><a href="/games" class="nav-link px-2 text-white">Games</a></li>
-          <li><a href="/about" class="nav-link btn btn-outline-success px-2 text-white rounded-3" type="button">About</a></li>
+          <li><a href="/" class="nav-link btn btn-primary px-2 text-white rounded-3" type="button">
+            <i class="fa-solid fa-house"></i>
+            Home
+          </a></li>
+          <li><a href="/players" class="nav-link px-2 text-white">
+            <i class="fa-regular fa-user"></i>
+            Players
+          </a></li>
+          <li><a href="/games" class="nav-link px-2 text-white">
+            <i class="fa-solid fa-gamepad"></i>
+            Games
+          </a></li>
+          <li><a href="/about" class="nav-link btn btn-outline-success px-2 text-white rounded-3" type="button">
+            <i class="fa-solid fa-circle-info"></i>
+            About
+          </a></li>
         </ul>
 
-<!--        <div class="text-end">-->
-<!--          <button type="button" class="btn btn-outline-light me-2">Login</button>-->
-<!--          <button type="button" class="btn btn-warning">Sign-up</button>-->
-<!--        </div>-->
+        <div class="text-end">
+          {% if session.get('user-signed-in', False) %}
+            <a href="/sign-out" class="btn btn-info me-2">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Sign Out
+            </a>
+          {% else %}
+            <a href="/sign-in" class="btn btn-info me-2">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              Sign In
+            </a>
+          {% endif %}
+        </div>
+
       </div>
     </div>
   </header>

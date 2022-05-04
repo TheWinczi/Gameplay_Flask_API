@@ -1,3 +1,5 @@
+import json
+
 from api_accounts.src.account.service.account_service import AccountService
 from api_accounts.src.account.requests_parsers.requests_parsers import *
 from api_accounts.src.account.roles.account_roles import Roles
@@ -110,4 +112,7 @@ class AccountsAuthenticationAPI(Resource):
         if account.password != password:
             return Response(status=401)
 
-        return Response(status=200)
+        response = {
+            'role': Roles.to_str(account.role)
+        }
+        return Response(json.dumps(response), status=200)

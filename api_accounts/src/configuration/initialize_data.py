@@ -13,6 +13,7 @@ def _initialize_accounts():
     """
     accounts = [
         Account(login='admin', password='admin', role=Roles.ADMIN.to_int),
+        Account(login='guest', password='guest', role=Roles.GUEST.to_int)
     ]
 
     for account in accounts:

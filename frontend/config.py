@@ -22,8 +22,9 @@ CSRF_SESSION_KEY = "absolutely_secret_csrf_key"
 SECRET_KEY = "absolutely_secret_key"
 
 # Other services addresses
-GAMES_SERVER_URL = "http://127.0.0.1:8082/"
 PLAYERS_SERVER_URL = "http://127.0.0.1:8081/"
+GAMES_SERVER_URL = "http://127.0.0.1:8082/"
+ACCOUNTS_SERVER_URL = "http://127.0.0.1:8083/"
 
 MAX_CONTENT_SIZE = 200 * 200
 PLAYER_IMAGE_FILE_ALLOWED_EXTENSIONS = (".png", ".jpeg", ".jpg", ".bmp")

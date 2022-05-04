@@ -15,16 +15,18 @@
             {{ form.hidden_tag() }}
 
             <div class="form-floating mb-3">
-                {{ form.description(class="form-control", placeholder="Description") }}
-                {{ form.description.label(class="form-control-label") }}
-
                 {% if form.description.errors %}
-                    {% for error in form.description.errors %}
-                        <div id="description-help" class="form-text">{{ error }}</div>
-                    {% endfor %}
+                    {{ form.description(class="form-control is-invalid", placeholder="Description") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
                 {% else %}
+                    {{ form.description(class="form-control", placeholder="Description") }}
                     <div id="description-help" class="form-text">Optional, length have to be between 1 and 400 signs</div>
                 {% endif %}
+                {{ form.description.label(class="form-control-label") }}
             </div>
             <div class="form-group mb-3">
                 {{ form.submit(class="btn btn-primary") }}

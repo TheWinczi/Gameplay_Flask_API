@@ -1,0 +1,96 @@
+// =====================================================
+//                 Players API Requests
+// =====================================================
+
+
+###
+
+GET http://localhost:8083/api/accounts
+
+###
+// Getting exising account
+GET http://localhost:8083/api/accounts/admin
+
+###
+// Getting NOT exising account
+GET http://localhost:8083/api/accounts/LoginExample
+
+###
+
+POST http://localhost:8083/api/accounts
+Content-Type: application/json
+
+{
+  "login": "AccountLogin",
+  "password": "default_password"
+}
+
+###
+
+POST http://localhost:8083/api/accounts
+Content-Type: application/json
+
+{
+  "login": "Undefined",
+  "password": "default_password",
+  "role": "undefined"
+}
+
+###
+// Updating exising player
+
+PUT http://localhost:8083/api/accounts/admin
+Content-Type: application/json
+
+{
+  "role": "guest"
+}
+
+###
+// Updateing NOT exising player
+
+PUT http://localhost:8083/api/accounts/LoginExample
+Content-Type: application/json
+
+{
+  "username": "NewLogin"
+}
+
+###
+// Deleting exising player
+
+DELETE http://localhost:8083/api/accounts/admin
+
+###
+// Deleting NOT exising player
+DELETE http://localhost:8083/api/accounts/LoginExample
+
+###
+// Authorize correct existing account
+POST http://localhost:8083/api/accounts/authentication
+Content-Type: application/json
+
+{
+  "login": "admin",
+  "password": "admin"
+}
+
+###
+// Authorize not existing account
+POST http://localhost:8083/api/accounts/authentication
+Content-Type: application/json
+
+{
+  "login": "loginExample",
+  "password": "password"
+}
+
+###
+// Authorize incorrect existing account
+POST http://localhost:8083/api/accounts/authentication
+Content-Type: application/json
+
+{
+  "login": "admin",
+  "password": "password"
+}

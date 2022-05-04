@@ -14,10 +14,12 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                         Details
                     </a>
-                    <a href="/games/{{ game.id }}/edit" class="btn btn-secondary" role="button">
-                        <i class="fa-solid fa-gears"></i>
-                        Edit
-                    </a>
+                    {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+                        <a href="/games/{{ game.id }}/edit" class="btn btn-secondary" role="button">
+                            <i class="fa-solid fa-gears"></i>
+                            Edit
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -32,18 +34,22 @@
                         {{ player.username }}
                     </h5>
                     <div class="btn-group mb-2">
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/remove" class="btn btn-info" role="button">
-                            <i class="fa-solid fa-circle-minus"></i>
-                            Remove
-                        </a>
+                        {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/remove" class="btn btn-info" role="button">
+                                <i class="fa-solid fa-circle-minus"></i>
+                                Remove
+                            </a>
+                        {% endif %}
                         <a href="/players/{{ player.id }}" class="btn btn-success" role="button">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             Details
                         </a>
-                        <a href="/players/{{ player.id }}/edit" class="btn btn-secondary" role="button">
-                            <i class="fa-solid fa-gears"></i>
-                            Edit
-                        </a>
+                        {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+                            <a href="/players/{{ player.id }}/edit" class="btn btn-secondary" role="button">
+                                <i class="fa-solid fa-gears"></i>
+                                Edit
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="px-2 border-bottom">
@@ -58,23 +64,27 @@
                     <div class="input-group mb-2">
                         <label for="player-{{ player.id }}-score" class="input-group-text">score</label>
                         <input id="player-{{ player.id }}-score" class="form-control" aria-label="score" value="{{ player.score }}" readonly />
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/1" role="button" class="btn btn-success">+1</a>
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/5" role="button" class="btn btn-success">+5</a>
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/10" role="button" class="btn btn-success">+10</a>
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/1" role="button" class="btn btn-danger">-1</a>
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/5" role="button" class="btn btn-danger">-5</a>
-                        <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/10" role="button" class="btn btn-danger">-10</a>
+                        {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/1" role="button" class="btn btn-success">+1</a>
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/5" role="button" class="btn btn-success">+5</a>
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/points/add/10" role="button" class="btn btn-success">+10</a>
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/1" role="button" class="btn btn-danger">-1</a>
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/5" role="button" class="btn btn-danger">-5</a>
+                            <a href="/games/{{ game.id }}/players/{{ player.id }}/points/subtract/10" role="button" class="btn btn-danger">-10</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         {% endfor %}
     {% endif %}
 
-    <div class="m-auto align-items-center text-center">
-        <a href="/games/{{ game.id }}/add-new-player" id="add-game-player-btn" class="btn btn-info" role="button">
-            <i class="fa-solid fa-circle-plus"></i>
-            Add New Player
-        </a>
-    </div>
+    {% if session.get('user-signed-in', False) and session.get('admin', False) %}
+        <div class="m-auto align-items-center text-center">
+            <a href="/games/{{ game.id }}/add-new-player" id="add-game-player-btn" class="btn btn-info" role="button">
+                <i class="fa-solid fa-circle-plus"></i>
+                Add New Player
+            </a>
+        </div>
+    {% endif %}
 
 {% endblock %}

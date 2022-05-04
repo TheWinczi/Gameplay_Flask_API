@@ -1,9 +1,11 @@
 import requests
-from flask import render_template, flash, redirect, url_for, abort
+
+from flask_bcrypt import generate_password_hash
+from flask import render_template, flash, redirect, url_for, abort, session
 
 from frontend.src import app
-from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL
-from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, EditGameForm
+from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL, ACCOUNTS_SERVER_URL
+from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, EditGameForm, AccountSignInForm
 from frontend.src.gameplay.validators import is_player_image_valid
 
 
@@ -260,3 +262,42 @@ def edit_player(player_id: int):
             return render_template("gameplay/players/player_edit.html", form=form, player=player)
         else:
             abort(player.status_code)
+
+
+@app.route('/sign-in', methods=('POST', 'GET'))
+def sign_in():
+    form = AccountSignInForm()
+
+    if form.validate_on_submit():
+        login = form.login.data
+        password = generate_password_hash(form.password.data)
+
+        r = requests.post(f'{ACCOUNTS_SERVER_URL}api/accounts/authentication', data={
+            'login': login,
+            'password': password
+        })
+        if r.status_code != 200:
+            flash('Invalid login or password', 'danger')
+            return render_template('gameplay/signing/sign_in.html', form=form)
+
+        role = r.json().get('role', '')
+        if not isinstance(role, str):
+            role = 'UNKNOWN'
+
+        role = role.lower()
+        session['guest'] = role == 'guest'
+        session['admin'] = role == 'admin'
+        session['user-signed-in'] = True
+
+        flash(f'Signing in as {role} succeed', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('gameplay/signing/sign_in.html', form=form)
+
+
+@app.route('/sign-out', methods=('GET',))
+def sign_out():
+    session.clear()
+
+    flash('Signing out succeed', 'success')
+    return redirect(url_for('home'))

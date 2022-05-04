@@ -8,6 +8,7 @@ from api_accounts.src.decorators.logging import log_info
 
 from flask import Response
 from flask_restful import Resource
+from flask_bcrypt import check_password_hash
 
 
 class AccountsAPI(Resource):
@@ -109,7 +110,7 @@ class AccountsAuthenticationAPI(Resource):
         if account is None:
             return Response(status=404)
 
-        if account.password != password:
+        if not check_password_hash(password, account.password):
             return Response(status=401)
 
         response = {

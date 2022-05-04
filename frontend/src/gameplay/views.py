@@ -1,4 +1,6 @@
 import requests
+
+from flask_bcrypt import generate_password_hash
 from flask import render_template, flash, redirect, url_for, abort, session
 
 from frontend.src import app
@@ -268,7 +270,7 @@ def sign_in():
 
     if form.validate_on_submit():
         login = form.login.data
-        password = form.password.data
+        password = generate_password_hash(form.password.data)
 
         r = requests.post(f'{ACCOUNTS_SERVER_URL}api/accounts/authentication', data={
             'login': login,

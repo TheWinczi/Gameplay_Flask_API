@@ -1,7 +1,7 @@
 Flask==2.0.2
 Flask-SQLAlchemy==2.5.1
 Flask-RESTful==0.3.9
-Flask==2.0.2
+Flask-Bcrypt==1.0.1
 requests==2.26.0
 SQLAlchemy==1.4.31
 WTForms==3.0.1

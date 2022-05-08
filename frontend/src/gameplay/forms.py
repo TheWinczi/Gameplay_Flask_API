@@ -7,7 +7,7 @@ from flask_wtf.file import FileField, FileAllowed
 
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField
 from wtforms.widgets import TextArea
-from wtforms.validators import DataRequired, Length, Optional, ValidationError
+from wtforms.validators import DataRequired, Length, Optional, ValidationError, EqualTo
 
 
 # ---------- ---------- ----------
@@ -123,14 +123,39 @@ class AccountSignInForm(FlaskForm):
                              validators=[DataRequired(), Length(min=1, max=256)])
     submit = SubmitField("Sing in")
 
-    def validate_login(self, login: str):
-        if not isinstance(login, str):
+    def validate_login(self, login):
+        if not isinstance(login.data, str):
             raise ValidationError('Invalid login. Could be only string.')
-        if not (1 <= len(login) <= 50):
+        if not (1 <= len(login.data) <= 50):
             raise ValidationError('Invalid login length. Could be only between 1 and 50 signs.')
 
-    def validate_password(self, password: str):
-        if not isinstance(password, str):
+    def validate_password(self, password):
+        if not isinstance(password.data, str):
             raise ValidationError('Invalid password. Could be only string.')
-        if not (1 <= len(password) <= 256):
+        if not (1 <= len(password.data) <= 256):
+            raise ValidationError('Invalid password length. Could be only between 1 and 256 signs.')
+
+
+class AccountSingUpForm(FlaskForm):
+    login = StringField("Login",
+                        validators=[DataRequired(), Length(min=1, max=50)])
+    password = PasswordField("Password", [
+        DataRequired(),
+        Length(min=1, max=256),
+        EqualTo('password_confirm', message='Passwords must match')
+    ])
+    password_confirm = PasswordField("Confirm Password",
+                                     validators=[DataRequired(), Length(min=1, max=256)])
+    submit = SubmitField("Sing Up")
+
+    def validate_login(self, login):
+        if not isinstance(login.data, str):
+            raise ValidationError('Invalid login. Could be only string.')
+        if not (1 <= len(login.data) <= 50):
+            raise ValidationError('Invalid login length. Could be only between 1 and 50 signs.')
+
+    def validate_password(self, password):
+        if not isinstance(password.data, str):
+            raise ValidationError('Invalid password. Could be only string.')
+        if not (1 <= len(password.data) <= 256):
             raise ValidationError('Invalid password length. Could be only between 1 and 256 signs.')

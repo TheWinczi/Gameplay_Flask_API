@@ -48,10 +48,16 @@
               Sign Out
             </a>
           {% else %}
-            <a href="/sign-in" class="btn btn-info me-2">
-              <i class="fa-solid fa-right-to-bracket"></i>
-              Sign In
-            </a>
+            <div class="btn-group">
+              <a href="/sign-in" class="btn btn-info">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Sign In
+              </a>
+              <a href="/sign-up" class="btn btn-light me-2">
+                <i class="fa-solid fa-user-plus"></i>
+                Sign Up
+              </a>
+            </div>
           {% endif %}
         </div>
 

@@ -8,11 +8,13 @@ class Roles(Enum):
     """
     UNDEFINED = 0
     ADMIN = 1
-    GUEST = 2
+    USER = 2
+    GUEST = 3
 
     __roles_dict = {
         UNDEFINED: 'undefined',
         ADMIN: 'admin',
+        USER: 'user',
         GUEST: 'guest'
     }
 

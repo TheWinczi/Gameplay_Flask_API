@@ -5,7 +5,8 @@ from flask import render_template, flash, redirect, url_for, abort, session
 
 from frontend.src import app
 from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL, ACCOUNTS_SERVER_URL
-from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, EditGameForm, AccountSignInForm
+from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, \
+    EditGameForm, AccountSignInForm, AccountSingUpForm
 from frontend.src.gameplay.validators import is_player_image_valid
 
 
@@ -293,6 +294,32 @@ def sign_in():
         return redirect(url_for('home'))
 
     return render_template('gameplay/signing/sign_in.html', form=form)
+
+
+@app.route('/sign-up', methods=('GET', 'POST'))
+def sign_up():
+    form = AccountSingUpForm()
+
+    if form.validate_on_submit():
+        login = form.login.data
+        password = form.password.data
+
+        r = requests.post(f'{ACCOUNTS_SERVER_URL}api/accounts', data={
+            'login': login,
+            'password': password,
+            'role': 'user'
+        })
+        if r.status_code != 201:
+            flash('Creating account failed', 'danger')
+            return redirect(url_for('home'))
+
+        session['guest'] = True
+        session['user-signed-in'] = True
+
+        flash(f'Creating account succeed', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('gameplay/signing/sign_up.html', form=form)
 
 
 @app.route('/sign-out', methods=('GET',))

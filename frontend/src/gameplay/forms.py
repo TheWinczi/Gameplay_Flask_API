@@ -1,13 +1,15 @@
 import requests
 
-from frontend.config import PLAYERS_SERVER_URL
-
+from frontend.src import app
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, Length, Optional, ValidationError, EqualTo
+
+
+PLAYERS_SERVER_URL = app.config.get('PLAYERS_SERVER_URL')
 
 
 # ---------- ---------- ----------

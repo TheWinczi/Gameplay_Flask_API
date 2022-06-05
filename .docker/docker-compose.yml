@@ -13,7 +13,17 @@ services:
       - "8080:8080"
     networks:
       - internal_network
-  
+
+  # Gateway service being between 
+  # frontend and all backend services
+  api_gateway:
+    container_name: api_gateway
+    build:
+      context: "./api_gateway"
+      dockerfile: "Dockerfile"
+    networks:
+    - internal_network
+
   # Api Players application which is used 
   # by frontend for players management
   api_players:
@@ -21,8 +31,6 @@ services:
     build:
       context: "../"
       dockerfile: ".docker/api_players/Dockerfile"
-    depends_on:
-      - api_games
     networks:
       - internal_network
 

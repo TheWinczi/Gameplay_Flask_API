@@ -22,9 +22,9 @@ CSRF_SESSION_KEY = "absolutely_secret_csrf_key"
 SECRET_KEY = "absolutely_secret_key"
 
 # Other services addresses
-PLAYERS_SERVER_URL = "http://api_players:8081/"
-GAMES_SERVER_URL = "http://api_games:8082/"
-ACCOUNTS_SERVER_URL = "http://api_accounts:8083/"
+PLAYERS_SERVER_URL = "http://api_gateway:8000/"
+GAMES_SERVER_URL = "http://api_gateway:8000/"
+ACCOUNTS_SERVER_URL = "http://api_gateway:8000/"
 
 MAX_CONTENT_SIZE = 200 * 200
 PLAYER_IMAGE_FILE_ALLOWED_EXTENSIONS = (".png", ".jpeg", ".jpg", ".bmp")

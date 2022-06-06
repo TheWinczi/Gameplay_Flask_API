@@ -1,6 +1,6 @@
 from functools import wraps
 
-from api_players.src import app
+from api_accounts.src import app
 
 
 def log_info(log_time=True, log_return=True):

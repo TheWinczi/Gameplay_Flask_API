@@ -4,10 +4,14 @@ from flask_bcrypt import generate_password_hash
 from flask import render_template, flash, redirect, url_for, abort, session
 
 from frontend.src import app
-from frontend.config import GAMES_SERVER_URL, PLAYERS_SERVER_URL, ACCOUNTS_SERVER_URL
 from frontend.src.gameplay.forms import AddPlayerForm, EditPlayerForm, AddGameForm, \
     EditGameForm, AccountSignInForm, AccountSingUpForm
 from frontend.src.gameplay.validators import is_player_image_valid
+
+
+GAMES_SERVER_URL = app.config.get('GAMES_SERVER_URL')
+PLAYERS_SERVER_URL = app.config.get('PLAYERS_SERVER_URL')
+ACCOUNTS_SERVER_URL = app.config.get('ACCOUNTS_SERVER_URL')
 
 
 @app.route("/", methods=("GET",))

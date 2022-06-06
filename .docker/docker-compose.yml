@@ -2,20 +2,33 @@ version: "3.9"
 
 
 services:
-  # Frontend flask application being only one
-  # container user could connect to
+
+  # Reverse proxy application being only
+  # one container that user can connect to.
+  # It determines which request goes to
+  # which server (api gateway or frontend).
+  reverse_proxy:
+    container_name: reverse_proxy
+    build:
+      context: "./reverse_proxy"
+      dockerfile: "Dockerfile"
+    ports:
+      - "80:80"
+    networks:
+      - internal_network
+
+  # Frontend flask application with
+  # whole frontend webpage content.
   frontend:
     container_name: frontend
     build:
       context: "../"
       dockerfile: "./.docker/frontend/Dockerfile"
-    ports:
-      - "8080:8080"
     networks:
       - internal_network
-
+    
   # Gateway service being between 
-  # frontend and all backend services
+  # frontend and all backend services.
   api_gateway:
     container_name: api_gateway
     build:
@@ -25,7 +38,7 @@ services:
     - internal_network
 
   # Api Players application which is used 
-  # by frontend for players management
+  # by frontend for players management.
   api_players:
     container_name: api_players
     build:
@@ -35,7 +48,7 @@ services:
       - internal_network
 
   # Api Games application which is used
-  # by frontend for games management
+  # by frontend for games management.
   api_games:
     container_name: api_games
     build:
@@ -45,7 +58,7 @@ services:
       - internal_network
 
   # Api Accounts application which is used
-  # by frontend for accounts management
+  # by frontend for accounts management.
   api_accounts:
     container_name: api_accounts
     build:
@@ -54,6 +67,6 @@ services:
     networks:
       - internal_network
 
-# Internal network for all containers
+# Internal network for all containers.
 networks:
   internal_network:

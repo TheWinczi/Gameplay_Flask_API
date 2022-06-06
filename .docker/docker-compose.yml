@@ -12,6 +12,9 @@ services:
     build:
       context: "./reverse_proxy"
       dockerfile: "Dockerfile"
+    depends_on:
+      - frontend
+      - api_gateway
     ports:
       - "80:80"
     networks:
@@ -27,7 +30,7 @@ services:
     networks:
       - internal_network
     
-  # Gateway service being between 
+  # Gateway service being between
   # frontend and all backend services.
   api_gateway:
     container_name: api_gateway

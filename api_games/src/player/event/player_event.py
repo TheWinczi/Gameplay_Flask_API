@@ -15,7 +15,7 @@ class PlayerEventsHandler(threading.Thread):
         super(PlayerEventsHandler, self).__init__()
         self._is_interrupted = False
 
-        self._service_url = 'amqps://jycxnazn:2eayTIEEpvC6NC5g7ZHsBAODwjRIo3ne@sparrow.rmq.cloudamqp.com/jycxnazn'
+        self._service_url = 'amqps://gtqxiusc:EWfENRrRkc8Dko7dWDQPyTRX4jGy0k6z@sparrow.rmq.cloudamqp.com/gtqxiusc'
         self._queue_name = 'players_events_queue'
         self._connection = self._create_queue_connection()
         self._events_parser = PlayerEventsParser()

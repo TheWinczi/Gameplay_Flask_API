@@ -35,8 +35,8 @@ API_ACCOUNTS_LOGGING_FILE = "instance/api_accounts_logs.log"
 
 # Swagger configuration
 ADD_SWAGGER = True
-SWAGGER_URL = '/api/accounts/swagger'
-API_DEFINITION_FILE_URL = '/static/swagger/swagger.json'
+SWAGGER_URL = '/api/accounts/swagger/'
+API_DEFINITION_FILE_URL = '/api/accounts/static/swagger/swagger.json'
 SWAGGER_CONFIG = {
     'app name': 'Accounts API Swagger'
 }

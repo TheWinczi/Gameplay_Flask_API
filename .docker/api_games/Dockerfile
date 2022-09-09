@@ -9,7 +9,7 @@ WORKDIR /flask_app/api_games
 RUN pip install -r ./requirements.txt
 
 ENV FLASK_APP=src
-ENV FLASK_ENV=development
+ENV FLASK_ENV=production
 ENV FLASK_RUN_PORT=8082
 
 ENTRYPOINT [ "python" ]

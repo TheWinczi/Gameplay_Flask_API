@@ -35,8 +35,8 @@ SECRET_KEY = "absolutely_secret_key"
 
 # Swagger configuration
 ADD_SWAGGER = True
-SWAGGER_URL = '/api/swagger'
-API_DEFINITION_FILE_URL = '/static/swagger/swagger.json'
+SWAGGER_URL = '/api/games/swagger/'
+API_DEFINITION_FILE_URL = '/api/games/static/swagger/swagger.json'
 SWAGGER_CONFIG = {
     'app name': 'Games API Swagger'
 }

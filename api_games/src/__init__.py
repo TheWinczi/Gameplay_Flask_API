@@ -15,7 +15,9 @@ def create_app(test_config=None):
     # create and configure the app
     global app
     app = Flask(__name__,
-                instance_path=os.path.abspath(os.path.dirname(__file__)))
+                instance_path=os.path.abspath(os.path.dirname(__file__)),
+                static_url_path='/api/games/static/',
+                static_folder='static')
 
     if test_config is None:
         # load the instance config, if it exists, when not testing

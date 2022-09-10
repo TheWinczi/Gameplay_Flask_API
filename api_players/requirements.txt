@@ -9,3 +9,4 @@ WTForms==3.0.1
 Werkzeug==2.0.3
 pika==1.2.1
 flask-swagger-ui==4.11.1
+mysqlclient==2.1.1

@@ -7,9 +7,15 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database - we are working with
 # SQLite for this example
+DATABASE_USER_LOGIN = 'root'
+DATABASE_USER_PASSWORD = 'root'
+DATABASE_ADDRESS = 'mariadb'
+DATABASE_TABLE = 'accounts_db'
+DATABASE_DRIVER = 'mysql'
+SQLALCHEMY_DATABASE_URI = f'{DATABASE_DRIVER}://{DATABASE_USER_LOGIN}:{DATABASE_USER_PASSWORD}@{DATABASE_ADDRESS}:3306/{DATABASE_TABLE}'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:' # 'sqlite:///' + os.path.join(BASE_DIR, 'instance', 'accounts.db')
 DATABASE_CONNECT_OPTIONS = {}
+# SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 
 # Application threads. A common general assumption is
 # using 2 per available processor cores - to handle

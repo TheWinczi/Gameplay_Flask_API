@@ -3,6 +3,25 @@ version: "3.9"
 
 services:
 
+  # RabbitMQ service instance being
+  # Message queue receiver and sender
+  rabbitmq:
+    container_name: rabbitmq
+    build:
+      context: "./rabbitmq"
+      dockerfile: "Dockerfile"
+    networks:
+      - internal_network
+
+  # System database based on MariaDB image
+  mariadb:
+    container_name: mariadb
+    build:
+      context: "./mariadb"
+      dockerfile: "Dockerfile"
+    networks:
+      - internal_network
+
   # Reverse proxy application being only
   # one container that user can connect to.
   # It determines which request goes to
@@ -29,7 +48,7 @@ services:
       dockerfile: "./.docker/frontend/Dockerfile"
     networks:
       - internal_network
-    
+
   # Gateway service being between
   # frontend and all backend services.
   api_gateway:
@@ -37,6 +56,10 @@ services:
     build:
       context: "./api_gateway"
       dockerfile: "Dockerfile"
+    depends_on:
+      - api_players
+      - api_accounts
+      - api_games
     networks:
     - internal_network
 
@@ -47,6 +70,9 @@ services:
     build:
       context: "../"
       dockerfile: ".docker/api_players/Dockerfile"
+    depends_on:
+      - rabbitmq
+      - mariadb
     networks:
       - internal_network
 
@@ -57,6 +83,9 @@ services:
     build:
       context: "../"
       dockerfile: ".docker/api_games/Dockerfile"
+    depends_on:
+      - rabbitmq
+      - mariadb
     networks:
       - internal_network
 
@@ -67,6 +96,8 @@ services:
     build:
       context: "../"
       dockerfile: ".docker/api_accounts/Dockerfile"
+    depends_on:
+      - mariadb
     networks:
       - internal_network
 

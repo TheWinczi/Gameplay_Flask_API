@@ -45,7 +45,8 @@ class PlayerEventQueueManager(object):
         queue messages management. """
 
     def __init__(self):
-        self._service_url = 'amqps://gtqxiusc:EWfENRrRkc8Dko7dWDQPyTRX4jGy0k6z@sparrow.rmq.cloudamqp.com/gtqxiusc'
+        # self._service_url = 'amqps://gtqxiusc:EWfENRrRkc8Dko7dWDQPyTRX4jGy0k6z@sparrow.rmq.cloudamqp.com/gtqxiusc'
+        self._service_url = 'amqp://guest:guest@rabbitmq/%2f'
         self._queue_name = 'players_events_queue'
         self._connection = self._create_queue_connection()
 

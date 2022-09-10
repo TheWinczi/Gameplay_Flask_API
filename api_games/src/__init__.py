@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
@@ -13,6 +15,7 @@ db = None
 
 def create_app(test_config=None):
     # create and configure the app
+    time.sleep(10)
     global app
     app = Flask(__name__,
                 instance_path=os.path.abspath(os.path.dirname(__file__)),
